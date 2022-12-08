@@ -1,26 +1,31 @@
-int ft_is_prime(int nb)
-{
-    int divider;
+/* ************************************************************************** */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   ft_is_prime.c									  :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: kmykhail <marvin@42.fr>					+#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2022/12/01 16:13:10 by kmykhail		  #+#	#+#			 */
+/*   Updated: 2022/12/01 16:13:11 by kmykhail		 ###   ########.fr	   */
+/*																			*/
+/* ************************************************************************** */
 
-    if (nb <= 1)
-    {
-        return (0);
-    }
-    divider = 2;
-    while (divider < nb)
-    {
-        if (nb % divider == 0)
-        {
-            return (0);
-        }
-        divider++;
-    }
-    return (1);
-}
-
-#include <stdio.h>
-int main()
+int	ft_is_prime(int nb)
 {
-	int num = 2147483647;
-	printf("%i\n", ft_is_prime(num));
+	int	divider;
+
+	if (nb <= 1)
+	{
+		return (0);
+	}
+	divider = 2;
+	while (divider < nb)
+	{
+		if (nb % divider == 0)
+		{
+			return (0);
+		}
+		divider++;
+	}
+	return (1);
 }

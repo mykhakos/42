@@ -1,71 +1,66 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print_comb2.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/17 19:40:40 by kmykhail          #+#    #+#             */
+/*   Updated: 2022/11/21 18:39:19 by kmykhail         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
-#include <stdio.h>
 
-void ft_print_comb(void)
+void	ft_print_comb(void);
+
+void	ft_write(char d1, char n1, char d2, char n2)
 {
-    char doz1 = '6';
-    char num1 = '9';
-    char doz2 = '9';
-    char num2 = '8';
-    char delim[] = ", ";
-
-    while ((doz1+doz2) <= 57+57)
-    {
-        write(1, &doz1, 1);
-        write(1, &num1, 1);
-        write(1, " ", 1);
-        write(1, &doz2, 1);
-        write(1, &num2, 1);
-        write(1, &delim, 2);
-
-        num2 += 1;
-
-        if (num2 > '9')
-        {
-            doz2 += 1;
-            num2 = '0';
-        }
-        
-        if (doz2 > '9')
-        {
-            num1 += 1;
-
-            if (num1 > '9')
-            {
-                doz1 += 1;
-                num1 = '0';
-            }
-            
-            doz2 = doz1;
-            num2 = num1 + 1;
-
-            if (num2 > '9')
-            {
-                doz2 += 1;
-                num2 = '0';
-            }
-        }
-
-
-
-        /*
-        printf("\n----\n");
-        printf("doz1: %i -> %c\t", doz1, doz1);
-        printf("num1: %i -> %c\n", num1, num1);
-        printf("doz2: %i -> %c\t", doz2, doz2);
-        printf("num2: %i -> %c\n", num2, num2);
-        printf("\n");
-        */
-        
-
-        
-
-
-    }
-
+	write(1, &d1, 1);
+	write(1, &n1, 1);
+	write(1, " ", 1);
+	write(1, &d2, 1);
+	write(1, &n2, 1);
+	if (d1 != '9' || n1 != '8' || d2 != '9' || n2 != '9')
+	{
+		write(1, ", ", 2);
+	}
 }
 
-int main(void)
+void	ft_count(char add_num, char *num_pt, char *doz_pt)
 {
-    ft_print_comb();
+	if (add_num == -1)
+	{
+		add_num = *num_pt;
+	}
+	*num_pt = add_num + 1;
+	if (*num_pt > '9')
+	{
+		*doz_pt += 1;
+		*num_pt = '0';
+	}
+}
+
+void	ft_print_comb2(void)
+{
+	char	doz1;
+	char	num1;
+	char	doz2;
+	char	num2;
+
+	doz1 = '0';
+	num1 = '0';
+	doz2 = '0';
+	num2 = '1';
+	while (doz1 + doz2 <= 57 + 57)
+	{
+		ft_write(doz1, num1, doz2, num2);
+		ft_count(-1, &num2, &doz2);
+		if (doz2 > '9')
+		{
+			ft_count(-1, &num1, &doz1);
+			doz2 = doz1;
+			ft_count(num1, &num2, &doz2);
+		}
+	}
 }

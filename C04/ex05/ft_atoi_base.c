@@ -1,129 +1,93 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi_base.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/30 17:57:15 by kmykhail          #+#    #+#             */
+/*   Updated: 2022/11/30 17:57:17 by kmykhail         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
-#include <stdio.h>
 
- 
-void ft_putchar(char c)
+void	ft_putchar(char c)
 {
-    write(1, &c, 1);
+	write(1, &c, 1);
 }
 
-char *ft_get_basechars(char *base, int *basesize)
+int	is_space(char c)
 {
-    if (base == "poneyvif")
-    {
-        *basesize = 8;
-        return ("01234567");
-    }
-    else if (base == "0123456789")
-    {
-        *basesize = 10;
-        return ("0123456789");
-    }
-    else if (base == "01")
-    {
-        *basesize = 2;
-        return ("01");        
-    }
-    else if (base == "0123456789ABCDEF")
-    {
-        *basesize = 16;
-        return ("0123456789ABCDEF");
-    }
-    *basesize = 0;
-    return ("\0");
+	if (c == ' ' || c == '\f' || c == '\n'
+		|| c == '\r' || c == '\t' || c == '\v')
+		return (1);
+	return (0);
 }
 
-int is_space(char c)
+int	ft_check_base(char *base, int *basesize)
 {
-    if (c == ' ') //replace
-        return (1);
-    return (0);    
+	int	i;
+
+	i = 0;
+	while (base[i])
+	{
+		if (base[i] == '+' || base[i] == '-')
+			return (1);
+		i++;
+	}
+	if (i < 2)
+		return (1);
+	*basesize = i;
+	i = 0;
+	while (base[i + 1])
+	{
+		if (base[i] == base[i + 1])
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
-int is_sign(char c)
+int	ft_to_decimal(char c, char *base)
 {
-    if (c == '-' || c == '+')
-        return (1);
-    return (0);
+	int	num;
+
+	num = 0;
+	while (base[num])
+	{
+		if (c == base[num])
+			return (num);
+		num++;
+	}
+	return (-1);
 }
 
-int is_num(char c)
+int	ft_atoi_base(char *str, char *base)
 {
-    if (c >= '0' && c <= '9')
-        return (1);
-    return (0);    
-}
+	int	sign;
+	int	num;
+	int	num_tmp;
+	int	basesize;
 
-int ft_strlen(char *str)
-{
-    int len;
-
-    len = 0;
-    while (str[len])
-    {
-        len++;
-    }
-    return (len);
-}
-
-int ft_to_decimal(char c, char *basechars)
-{
-    int num;
-
-    num = 0;
-    while (basechars[num])
-    {
-        if (c == basechars[num])
-            return (num);
-        num++;
-    }
-    return (-1);
-}
-
-
-int ft_atoi_base(char *str, char *base)
-{
-    int sign;
-    int num;
-    int num_tmp;
-    char *basechars;
-    int basesize;
-    
-    num = 0;
-    sign = 1;
-    basechars = ft_get_basechars(base, &basesize);
-    while (is_space(*str))
-    {
-        str++;
-    }
-    while (is_sign(*str))
-    {
-        if (*str == '-')
-            sign *= -1;
-        str++;
-    }
-    while (is_num(*str))
-    {
-        num_tmp = ft_to_decimal(*str, basechars);
-        
-        if (num_tmp == -1)
-            return(0);
-        num = basesize * num + (*str - '0');
-        //printf("%d\n", num);
-        str++;
-    }
-    return (num * sign);
-}
-
-
-// Driver Code
-int main()
-{
-    char *str = "  +-123";
-    char *base = "0123456789ABCDEF";
-   
-    // Functional Code
-    int val = ft_atoi_base(str, base);
-    printf("%d ", val);
-    return 0;
+	num = 0;
+	sign = 1;
+	if (ft_check_base(base, &basesize))
+		return (0);
+	while (is_space(*str))
+		str++;
+	while (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+			sign *= -1;
+		str++;
+	}
+	while (*str)
+	{
+		if (ft_to_decimal(*str, base) == -1)
+			break ;
+		num = basesize * num + ft_to_decimal(*str, base);
+		str++;
+	}
+	return (num * sign);
 }

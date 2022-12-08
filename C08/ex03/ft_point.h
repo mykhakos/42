@@ -1,11 +1,22 @@
-#ifndef FT_BOOLEAN_H
-# define FT_BOOLEAN_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_point.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/06 19:17:33 by kmykhail          #+#    #+#             */
+/*   Updated: 2022/12/06 19:17:35 by kmykhail         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef FT_POINT_H
+# define FT_POINT_H
 
 typedef struct ft_point
 {
-    int x;
-    int y;
-} t_point;
-
+	int	x;
+	int	y;
+}	t_point;
 
 #endif

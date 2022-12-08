@@ -1,12 +1,21 @@
-#include <stdlib.h>
-#include <stdio.h>
+/* ************************************************************************** */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   ft_ultimate_range.c								:+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: kmykhail <marvin@42.fr>					+#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2022/12/05 16:13:40 by kmykhail		  #+#	#+#			 */
+/*   Updated: 2022/12/05 16:13:42 by kmykhail		 ###   ########.fr	   */
+/*																			*/
+/* ************************************************************************** */
 
-/*
+#include <stdlib.h>
+
 int	ft_ultimate_range(int **range, int min, int max)
 {
-    int		i;
-	int		len;
-	int		*buffer;
+	unsigned int	len;
+	unsigned int	i;
 
 	if (min >= max)
 	{
@@ -14,63 +23,29 @@ int	ft_ultimate_range(int **range, int min, int max)
 		return (0);
 	}
 	len = max - min;
-	buffer = malloc(len * sizeof(int));
-	if (!buffer)
-	{
-		*range = 0;
+	*range = malloc(len * sizeof(int));
+	if (*range == NULL)
 		return (-1);
-	}
 	i = 0;
 	while (i < len)
 	{
-		buffer[i] = min + i;
+		(*range)[i] = min + i;
 		i++;
 	}
-    *range = buffer;
 	return (len);
 }
-*/
 
-int ft_ultimate_range(int **range, int min, int max)
-{
-    int len;
-    int i;
-
-    if (min >= max)
-    {
-        range = 0;
-        return (0);
-    }
-    len = max - min;
-    //range = malloc(sizeof(int*));
-    //*range[0] = malloc(len * sizeof(int));
-    *range = malloc(len * sizeof(int));
-    i = 0;
-    while (i < len)
-    {
-        //*range[i] = min + i;
-        range[0][i] = min + i;
-        i++;
-    }
-    return (len);
-}
-
+/*
+#include <stdio.h>
 int main()
 {
-    //int **arr
-    int *arr;
-    int min = 0;
-    int max = 3;
-    int len;
-    int i = 0;
-    
-    //len = ft_ultimate_range(arr, min, max);
-    len = ft_ultimate_range(&arr, min, max);
-    while(i < len)
-    {
-        //printf("%i, ", arr[0][i]);
-        printf("%i, ", arr[i]);
-        i++;
-    }
-    return(0);
+	int *arr;
+	int len;
+	int min = 2;
+	int max = 5;
+	len = ft_ultimate_range(&arr, min, max);
+	printf("len: %i\n", len);
+	for (int i = 0; i < max - min; i++)
+		printf("%i, ", arr[i]);
 }
+*/

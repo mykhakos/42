@@ -1,89 +1,83 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_putnbr_base.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/30 15:21:01 by kmykhail          #+#    #+#             */
+/*   Updated: 2022/11/30 15:21:13 by kmykhail         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <stdio.h>
 
-void ft_putchar(char c)
+void	ft_putchar(char c)
 {
-    write(1, &c, 1);
+	write(1, &c, 1);
 }
 
-char *ft_get_basechars(char *base, int *basesize)
+int	ft_strlen(char *str)
 {
-    if (base == "poneyvif")
-    {
-        *basesize = 8;
-        return ("01234567");
-    }
-    else if (base == "0123456789")
-    {
-        *basesize = 10;
-        return ("0123456789");
-    }
-    else if (base == "01")
-    {
-        *basesize = 2;
-        return ("01");        
-    }
-    else if (base == "0123456789ABCDEF")
-    {
-        *basesize = 16;
-        return ("0123456789ABCDEF");
-    }
-    *basesize = 0;
-    return ("\0");
+	int	len;
+
+	len = 0;
+	while (str[len])
+	{
+		len++;
+	}
+	return (len);
 }
 
-void ft_putminint(int basesize)
+int	ft_check_base(char *base, int *basesize)
 {
-    int i;
-    char *num;
+	int	i;
 
-    if (basesize == 8)
-        num == "-20000000000";
-    else if (basesize == 10)
-        num == "-2147483648";
-    else if (basesize == 2)
-        num = "-10000000000000000000000000000000";
-    else if (basesize == 16)
-        num = "-80000000";
-    i = 0;
-    while (num[i])
-    {
-        ft_putchar(num[i]);
-        i++;
-    }
+	*basesize = ft_strlen(base);
+	if (*basesize < 2)
+		return (1);
+	i = 0;
+	while (base[i])
+	{
+		if (base[i] == '+' || base[i] == '-')
+			return (1);
+		i++;
+	}
+	i = 0;
+	while (base[i + 1])
+	{
+		if (base[i] == base[i + 1])
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
-void ft_putnbr_base(int nbr, char *base)
+void	ft_putnbr_base(int nbr, char *base)
 {
-    char *basechars;
-    int basesize;
+	int				err;
+	int				basesize;
+	unsigned int	nbr_tmp;
 
-    basechars = ft_get_basechars(base, &basesize);
-    if (basesize != 0 && nbr == -2147483648)
-    {
-        ft_putminint(basesize);
-    }
-    else if (basesize != 0)
-    {
-        if (nbr < 0)
-        {
-            ft_putchar('-');
-            nbr = -nbr;
-        }
-        if (nbr / basesize > 0)
-        {
-            ft_putnbr_base(nbr / basesize, base);
-            ft_putchar(basechars[nbr % basesize]);
-        }
-        else
-        {
-            ft_putchar(basechars[nbr % basesize]);
-        }
-    }
-}
-
-int main()
-{
-    char *base = "01234567";
-    ft_putnbr_base(-10457560, base);
+	err = ft_check_base(base, &basesize);
+	if (err == 0)
+	{
+		if (nbr < 0)
+		{
+			ft_putchar('-');
+			nbr_tmp = -nbr;
+		}
+		else
+			nbr_tmp = nbr;
+		if (nbr_tmp / basesize > 0)
+		{
+			ft_putnbr_base(nbr_tmp / basesize, base);
+			ft_putchar(base[nbr_tmp % basesize]);
+		}
+		else
+		{
+			ft_putchar(base[nbr_tmp % basesize]);
+		}
+	}
 }

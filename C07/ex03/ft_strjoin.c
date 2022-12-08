@@ -1,7 +1,18 @@
-#include <stdlib.h>
-#include <stdio.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/05 16:13:57 by kmykhail          #+#    #+#             */
+/*   Updated: 2022/12/05 16:13:58 by kmykhail         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int ft_strlen(char *str)
+#include <stdlib.h>
+
+int	ft_strlen(char *str)
 {
 	int	len;
 
@@ -11,10 +22,10 @@ int ft_strlen(char *str)
 	return (len);
 }
 
-int ft_totlen(int size, char **strs, char *sep)
+int	ft_totlen(int size, char **strs, char *sep)
 {
 	int	len;
-	int i;
+	int	i;
 
 	len = 0;
 	i = 0;
@@ -46,15 +57,17 @@ char	*ft_strcat(char *dest, char *src)
 	return (dest);
 }
 
-char *ft_strjoin(int size, char **strs, char *sep)
+char	*ft_strjoin(int size, char **strs, char *sep)
 {
-	char *str;
-	int len;
-	int i;
+	char	*str;
+	int		len;
+	int		i;
 
 	len = ft_totlen(size, strs, sep);
-	str = malloc(len * sizeof(char));
-	str[0] = '\0'; 
+	str = malloc((len + 1) * sizeof(char));
+	if (str == NULL)
+		return (NULL);
+	str[0] = '\0';
 	i = 0;
 	while (i < size)
 	{
@@ -66,8 +79,12 @@ char *ft_strjoin(int size, char **strs, char *sep)
 	return (str);
 }
 
+/*
+#include <stdio.h>
 int main()
 {
-	char *strs[] = {"aa", "bbb", "ccc"};
-	printf("%s\n", ft_strjoin(3, strs, ",,,"));
+	char *strs[] = {"g", "woeowowowowowowow", "1234"};
+	char *strjoin = ft_strjoin(3, strs, ", ");
+	printf("%s\n", strjoin);
 }
+*/

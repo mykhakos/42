@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   ft_iterative_factorial.c						   :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: kmykhail <marvin@42.fr>					+#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2022/12/01 14:23:13 by kmykhail		  #+#	#+#			 */
+/*   Updated: 2022/12/01 14:23:15 by kmykhail		 ###   ########.fr	   */
+/*																			*/
+/* ************************************************************************** */
 
-int ft_iterative_factorial(int nb)
+int	ft_iterative_factorial(int nb)
 {
 	int	res;
 
@@ -15,13 +26,3 @@ int ft_iterative_factorial(int nb)
 	}
 	return (res);
 }
-
-#include <stdio.h>
-int main()
-{
-	int num = -1;
-	printf("%i\n", ft_iterative_factorial(num));
-}
-
-
-

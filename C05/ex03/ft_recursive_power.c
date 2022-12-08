@@ -1,27 +1,24 @@
-int ft_recursive_power(int nb, int power)
-{
-    int res;
+/* ************************************************************************** */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   ft_recursive_power.c							   :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: kmykhail <marvin@42.fr>					+#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2022/12/01 16:04:54 by kmykhail		  #+#	#+#			 */
+/*   Updated: 2022/12/01 16:04:55 by kmykhail		 ###   ########.fr	   */
+/*																			*/
+/* ************************************************************************** */
 
-    if (power < 0)
-    {
-        return (0);
-    }
-    if (nb == 0 && power == 0)
-    {
-        return (1);
-    }
-    res = 1;
-    if (power > 0)
-    {
-        res = nb * ft_recursive_power(nb, power - 1);
-    }
-    return (res);
-}
-
-#include <stdio.h>
-int main()
+int	ft_recursive_power(int nb, int power)
 {
-	int num = 3;
-    int pow = 3;
-	printf("%i\n", ft_recursive_power(num, pow));
+	if (power < 0)
+	{
+		return (0);
+	}
+	if (power == 0)
+	{
+		return (1);
+	}
+	return (nb * ft_recursive_power(nb, power - 1));
 }

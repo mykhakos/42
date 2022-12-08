@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_sort_params.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/02 18:39:26 by kmykhail          #+#    #+#             */
+/*   Updated: 2022/12/02 18:39:28 by kmykhail         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 
 void	ft_putstr(char *str)
@@ -6,10 +18,10 @@ void	ft_putstr(char *str)
 
 	i = 0;
 	while (str[i] != '\0')
-    {
+	{
 		write (1, &str[i], 1);
-        i++;
-    }
+		i++;
+	}
 }
 
 int	ft_strcmp(char *s1, char *s2)
@@ -20,12 +32,12 @@ int	ft_strcmp(char *s1, char *s2)
 	while (s1[i] || s2[i])
 	{
 		if (s1[i] != s2[i])
-        {
-            return (s1[i] - s2[i]);
-        }
-        i++;
+		{
+			return (s1[i] - s2[i]);
+		}
+		i++;
 	}
-	return (0);
+	return (s1[i] - s2[i]);
 }
 
 void	ft_strswap(char **str1, char **str2)
@@ -37,27 +49,27 @@ void	ft_strswap(char **str1, char **str2)
 	*str2 = tmp;
 }
 
-void    ft_sort_args(char **strarr, int len)
+void	ft_sort_args(char **strarr, int len)
 {
-    int i;
+	int	i;
 
-    i = 1;
-    while (i < len - 1)
-    {
-        if (ft_strcmp(strarr[i], strarr[i + 1]) > 0)
-        {
-            ft_strswap(&strarr[i], &strarr[i + 1]);
-            i = -1;
-        }    
-        i++;    
-    }
+	i = 1;
+	while (i < len - 1)
+	{
+		if (ft_strcmp(strarr[i], strarr[i + 1]) > 0)
+		{
+			ft_strswap(&strarr[i], &strarr[i + 1]);
+			i = 0;
+		}
+		i++;
+	}
 }
 
 int	main(int argc, char **argv)
 {
-    int i;
+	int	i;
 
-    ft_sort_args(argv, argc);
+	ft_sort_args(argv, argc);
 	i = 1;
 	while (i < argc)
 	{
