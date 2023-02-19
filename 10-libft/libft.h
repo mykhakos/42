@@ -4,6 +4,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+#define MAX(a,b) a > b ? a : b
+
 int		ft_atoi(const char *str);
 void	ft_bzero(void *s,	size_t n);
 void	*ft_calloc(size_t count, size_t size);
