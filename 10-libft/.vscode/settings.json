@@ -1,0 +1,5 @@
+{
+    "makefile.makePath": "C:\\ProgramData\\chocolatey\\lib\\make\\tools\\install\\bin",
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
+    "makefile.panel.visibility": true
+}
