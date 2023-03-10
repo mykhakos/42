@@ -49,11 +49,11 @@ SRC_BONUS =	ft_lstadd_back.c	\
 			ft_lstsize.c		\
 
 
-OBJS = $(SRC:.c=.o)
+OBJ = $(SRC:.c=.o)
 
-OBJS_BONUS = $(SRC_BONUS:.c=.o)
+OBJ_BONUS = $(SRC_BONUS:.c=.o)
 
-CC = cc
+CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 .PHONY: all bonus clean fclean re
@@ -63,11 +63,11 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	ar rcs $@ $^
 
-bonus: $(OBJS) $(OBJS_BONUS)
+bonus: $(OBJ) $(OBJ_BONUS)
 	ar rcs $(NAME) $^	
 
 %.o: %.c
-	$(CC) $(CFLAGS)  -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -rf $(OBJ)

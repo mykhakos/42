@@ -31,20 +31,20 @@
 
 void *ft_memmove(void* dest, const void* src, size_t n)
 {
-	char* d = (char*)dest;
-	const char* s = (const char*)src;
+	char* dst_ptr = (char*)dest;
+	const char* src_ptr = (const char*)src;
 
-	if (d < n)
+	if (dst_ptr < src_ptr)
     {
-        s += n;
-        d += n;
+        src_ptr += n;
+        dst_ptr += n;
 		while (n--)
-			*(--d) = *(--s);
+			*(--dst_ptr) = *(--src_ptr);
 	}
-	else if (d > n)
+	else if (dst_ptr > src_ptr)
 	{
 		while (n--)
-			*(d++) = *(s++);
+			*(dst_ptr++) = *(src_ptr++);
 	}
     return (dest);
 }

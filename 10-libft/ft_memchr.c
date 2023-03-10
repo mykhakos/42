@@ -8,7 +8,7 @@ void *ft_memchr(const void *str, int chr, size_t n)
 	{
 		if (*s == c)
 			return (void *)s;
-		*s++;
+		s++;
 	}
 	return NULL;
 }
