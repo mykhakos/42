@@ -1,6 +1,4 @@
 #include "get_next_line.h"
-#include <stdio.h>
-
 
 static int	find_newline_start(const char *s)
 {
@@ -9,8 +7,10 @@ static int	find_newline_start(const char *s)
 	i = 0;
 	while (s[i])
 	{
-		if (s[i] == '\n')
+		if (s[i] == '\n' || (s[i] == '\\' && s[i + 1] == 'n'))
 			return (i + 1);
+		//if (s[i] == '\\' && s[i + 1] == 'n')
+		//	return (i + 2);
 		i++;
 	}
 	return (-1);
