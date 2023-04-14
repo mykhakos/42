@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 
-static int	find_newline(const char *s)
+static int	find_newline_start(const char *s)
 {
 	int	i;
 
@@ -16,10 +16,15 @@ static int	find_newline(const char *s)
 	return (-1);
 }
 
-static int	update_remainder(char **remainder, char *buf, int bytes_read)
+static int	update_remainder(char **remainder, int fd)
 {
+	char	buf[BUFFER_SIZE + 1];
 	char	*tmp;
+	int		bytes_read;
 
+	bytes_read = read(fd, buf, BUFFER_SIZE);
+	if (bytes_read <= 0)
+		return (bytes_read);
 	buf[bytes_read] = '\0';
 	if (*remainder)
 	{
@@ -31,44 +36,43 @@ static int	update_remainder(char **remainder, char *buf, int bytes_read)
 	{
 		*remainder = ft_strdup(buf);
 	}
-	return (0);
+	return (bytes_read);
 }
 
-static int	extract_line(char **line, char **remainder)
+static char	*extract_line(char **remainder)
 {
 	int		newline_position;
 	char	*tmp;
+	char	*line;
 
-	newline_position = find_newline(*remainder);
+	line = NULL;
+	newline_position = find_newline_start(*remainder);
 	if (newline_position >= 0)
 	{
-		*line = ft_substr(*remainder, 0, newline_position);
+		line = ft_substr(*remainder, 0, newline_position);
 		tmp = *remainder;
 		*remainder = ft_strdup(tmp + newline_position);
 		free(tmp);
-		return (1);
 	}
-	return (0);
+	return (line);
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
 	int			bytes_read;
-	char		buf[BUFFER_SIZE + 1];
 	char		*line;
 	static char	*remainder[FD_MAX];
 
 	if (fd < 0 || fd >= FD_MAX)
 		return (NULL);
-	while ((bytes_read = read(fd, buf, BUFFER_SIZE)) > 0)
+	while ((bytes_read = update_remainder(&remainder[fd], fd)) > 0)
 	{
-		update_remainder(&remainder[fd], buf, bytes_read);
-		if (extract_line(&line, &remainder[fd]))
+		if ((line = extract_line(&remainder[fd])))
 			return (line);
 	}
 	if (bytes_read < 0)
 		return (NULL);
-	if (extract_line(&line, &remainder[fd]))
+	if ((line = extract_line(&remainder[fd])))
 		return (line);
 	if (remainder[fd])
 	{

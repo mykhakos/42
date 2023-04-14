@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "get_next_line.h"
 
-void process_file(int fd)
+int process_file(int fd)
 {
     char *line = NULL;
     printf("processing desciptor %i\n", fd);
@@ -12,8 +12,10 @@ void process_file(int fd)
         printf("processing line: ");
         printf("%s", line);
         free(line);
+        printf("done processing line\n");
     }
     printf("done processing desciptor %i\n", fd);
+    return (0);
 }
 
 int main(int argc, char **argv)
@@ -37,7 +39,8 @@ int main(int argc, char **argv)
         }
 
         printf("\nProcessing file: %s\n", argv[i]);
-        process_file(fd);
+        int res = process_file(fd);
+        printf("res: %i\n", res);
         printf("\nProcessing file: %s - done\n", argv[i]);
         close(fd);
         
