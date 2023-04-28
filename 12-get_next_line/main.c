@@ -10,9 +10,14 @@ int process_file(int fd)
     while ((line = get_next_line(fd)) != NULL)
     {
         //printf("processing line: ");
-        printf("%s", line);
+        printf("output: %s", line);
         free(line);
         //printf("done processing line\n");
+    }
+    if (line == NULL)
+    {
+        printf("output: %s", line);
+        free(line);
     }
     //printf("done processing descriptor %i\n", fd);
     return (0);
@@ -21,10 +26,11 @@ int process_file(int fd)
 int process_stdin()
 {
     char *line = NULL;
-
-    while ((line = get_next_line(STDIN_FILENO)) != NULL)
+    int i = 0;
+    //while ((line = get_next_line(STDIN_FILENO)) != NULL)
+    while (i<9)
     {
-        //printf("Received line: ");
+        line = get_next_line(STDIN_FILENO);
         printf("%s", line);
         free(line);
         //printf("Done processing line\n");
@@ -33,15 +39,15 @@ int process_stdin()
     //printf("Done processing stdin\n");
     return 0;
 }
-
+/*
 int main()
 {
     printf("Enter lines followed by Enter to finish:\n");
     process_stdin();
     return 0;
 }
+*/
 
-/*
 int main(int argc, char **argv)
 {
     if (argc < 2)
@@ -69,4 +75,3 @@ int main(int argc, char **argv)
 
     return (0);
 }
-*/
