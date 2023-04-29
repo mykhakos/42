@@ -12,18 +12,22 @@
 
 #include "get_next_line.h"
 
-static int	find_newline_start(const char *s)
+static void	join_and_free(char **remainder, char **buffer)
 {
-	int	i;
+	char	*tmp;
 
-	i = 0;
-	while (s[i])
+	if (*remainder)
 	{
-		if (s[i] == '\n')
-			return (i + 1);
-		i++;
+		tmp = *remainder;
+		*remainder = ft_strjoin(tmp, *buffer);
+		free(tmp);
+		free(*buffer);
 	}
-	return (-1);
+	else
+	{
+		*remainder = ft_strdup(*buffer);
+		free(*buffer);
+	}
 }
 
 static char	*extract_line(char **remainder)
@@ -33,7 +37,7 @@ static char	*extract_line(char **remainder)
 	char	*line;
 
 	line = NULL;
-	newline_position = find_newline_start(*remainder);
+	newline_position = ft_find_nl(*remainder);
 	if (newline_position >= 0)
 	{
 		line = ft_substr(*remainder, 0, newline_position);
@@ -44,24 +48,28 @@ static char	*extract_line(char **remainder)
 	return (line);
 }
 
-char	*read_and_extract(char **remainder, int fd, int *bytes_read)
+static char	*read_and_extract(char **remainder, int fd, int *bytes_read)
 {
-	char	buf[BUFFER_SIZE + 1];
-	char	*tmp;
+	char	*buffer;
 
-	*bytes_read = read(fd, buf, BUFFER_SIZE);
-	if (*bytes_read <= 0)
+	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
 		return (NULL);
-	buf[*bytes_read] = '\0';
-	if (*remainder)
+	*bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (*bytes_read <= 0)
 	{
-		tmp = *remainder;
-		*remainder = ft_strjoin(tmp, buf);
-		free(tmp);
+		free(buffer);
+		return (NULL);
 	}
-	else
-		*remainder = ft_strdup(buf);
+	buffer[*bytes_read] = '\0';
+	join_and_free(remainder, &buffer);
 	return (extract_line(remainder));
+}
+
+static void	free_remainder(char **remainder)
+{
+	free(*remainder);
+	*remainder = NULL;
 }
 
 char	*get_next_line(int fd)
@@ -80,13 +88,14 @@ char	*get_next_line(int fd)
 	}
 	if (bytes_read < 0)
 		return (NULL);
-	if (!line && remainder[fd])
+	if (line == NULL && remainder[fd])
 		line = extract_line(&remainder[fd]);
-	if (!line && remainder[fd])
+	if (remainder[fd] && *remainder[fd] == '\0')
+		free_remainder(&remainder[fd]);
+	if (line == NULL && remainder[fd])
 	{
 		line = ft_strdup(remainder[fd]);
-		free(remainder[fd]);
-		remainder[fd] = NULL;
+		free_remainder(&remainder[fd]);
 	}
 	return (line);
 }
