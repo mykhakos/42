@@ -16,7 +16,7 @@ void	ft_putnbr_fd(int n, int fd)
 {
 	if (n == INT_MIN)
 	{
-		ft_putstr_fd(ft_itoa(INT_MIN), fd);
+		ft_putstr_fd("-2147483648", fd);
 		return ;
 	}
 	if (n < 0)

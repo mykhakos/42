@@ -1,18 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print.c                                       :+:      :+:    :+:   */
+/*   utils_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 20:22:12 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/02/13 20:22:15 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/04/01 15:27:26 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/04/01 15:27:29 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isprint(int c)
+#include "../include/utils.h"
+
+void	ft_put_char(char c, size_t *counter)
 {
-	if ((c < 32) || (c > 126))
-		return (0);
-	return (1);
+	write(1, &c, 1);
+	*counter += 1;
+}
+
+void	ft_put_str(char *s, size_t *counter)
+{
+	if (s != NULL)
+	{
+		while (*s != '\0')
+			ft_put_char(*s++, counter);
+	}
+	else
+	{
+		ft_put_str("(null)", counter);
+	}
 }

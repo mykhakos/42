@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*																		    	*/
-/*														:::	  ::::::::   */
-/*   ft_strdup.c										    :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	    */
-/*   By: kmykhail <marvin@42.fr>					+#+  +:+	   +#+	    	*/
-/*												+#+#+#+#+#+   +#+		     */
-/*   Created: 2022/12/05 16:13:13 by kmykhail		  #+#	#+#			     */
-/*   Updated: 2023/02/17 16:13:19 by kmykhail		 ###   ########.fr	     */
-/*																			  */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/16 19:09:03 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/03/16 19:09:05 by kmykhail         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
@@ -18,8 +18,6 @@ char	*ft_strdup(const char *src)
 	size_t	src_len;
 	char	*dest;
 
-	if (src == NULL)
-		return NULL;
 	src_len = ft_strlen(src);
 	dest = malloc((src_len + 1) * sizeof(char));
 	if (dest == NULL)
@@ -32,15 +30,3 @@ char	*ft_strdup(const char *src)
 	}
 	return (dest);
 }
-
-/*
-#include <stdio.h>
-int main()
-{
-	char *src = "ajajaj";
-
-	char *arr = ft_strdup(src);
-	printf("%s\n", arr);
-	return 0;
-}
-*/

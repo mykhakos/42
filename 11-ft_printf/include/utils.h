@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*   ft_utils.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 14:20:19 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/02/13 14:20:20 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/03/16 19:16:34 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/04/01 14:53:15 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef UTILS_H
+# define UTILS_H
 
-void	*ft_memset(void *s, int c, size_t n)
-{
-	unsigned char	*ptr;
+# include <unistd.h>
 
-	ptr = s;
-	while (n--)
-		*ptr++ = (unsigned char)c;
-	return (s);
-}
+size_t	ft_strlen(const char *str);
+void	ft_put_char(char c, size_t *counter);
+void	ft_put_str(char *s, size_t *counter);
+void	ft_put_int_as_dec(int n, size_t *counter);
+void	ft_put_uint_as_dec(unsigned int n, size_t *counter);
+void	ft_put_uint_as_hex(unsigned long n, int upcase, size_t *counter);
+void	ft_put_ptr(void *ptr, size_t *counter);
+
+#endif

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static void	join_and_free(char **remainder, char **buffer)
 {
@@ -76,26 +76,26 @@ char	*get_next_line(int fd)
 {
 	int			bytes_read;
 	char		*line;
-	static char	*remainder;
+	static char	*remainder[FD_MAX];
 
 	if (fd < 0 || fd >= FD_MAX)
 		return (NULL);
 	while (1)
 	{
-		line = read_and_extract(&remainder, fd, &bytes_read);
+		line = read_and_extract(&remainder[fd], fd, &bytes_read);
 		if (line || bytes_read <= 0)
 			break ;
 	}
 	if (bytes_read < 0)
 		return (NULL);
-	if (line == NULL && remainder)
-		line = extract_line(&remainder);
-	if (remainder && *remainder == '\0')
-		free_remainder(&remainder);
-	if (line == NULL && remainder)
+	if (line == NULL && remainder[fd])
+		line = extract_line(&remainder[fd]);
+	if (remainder[fd] && *remainder[fd] == '\0')
+		free_remainder(&remainder[fd]);
+	if (line == NULL && remainder[fd])
 	{
-		line = ft_strdup(remainder);
-		free_remainder(&remainder);
+		line = ft_strdup(remainder[fd]);
+		free_remainder(&remainder[fd]);
 	}
 	return (line);
 }

@@ -12,6 +12,28 @@
 
 #include "libft.h"
 
+void	*ft_memmove(void *dest, const void *src, size_t n)
+{
+	char		*dst_ptr;
+	const char	*src_ptr;
+
+	dst_ptr = (char *)dest;
+	src_ptr = (const char *)src;
+	if (dst_ptr > src_ptr)
+	{
+		src_ptr += n;
+		dst_ptr += n;
+		while (n--)
+			*(--dst_ptr) = *(--src_ptr);
+	}
+	else if (dst_ptr < src_ptr)
+	{
+		while (n--)
+			*(dst_ptr++) = *(src_ptr++);
+	}
+	return (dest);
+}
+
 /*
 1) <-----s----->                start at end of s
                  <-----d----->
@@ -28,23 +50,3 @@
 5)               <-----s----->  start at beginning of s
    <-----d----->
 */
-
-void *ft_memmove(void* dest, const void* src, size_t n)
-{
-	char* dst_ptr = (char*)dest;
-	const char* src_ptr = (const char*)src;
-
-	if (dst_ptr < src_ptr)
-    {
-        src_ptr += n;
-        dst_ptr += n;
-		while (n--)
-			*(--dst_ptr) = *(--src_ptr);
-	}
-	else if (dst_ptr > src_ptr)
-	{
-		while (n--)
-			*(dst_ptr++) = *(src_ptr++);
-	}
-    return (dest);
-}

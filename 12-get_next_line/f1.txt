@@ -1,6 +1,0 @@
-1line1
-1line2
-1line3
-1two\nlines
-1loooooooooooooooooooooooooooooooooooooooooong
-1s

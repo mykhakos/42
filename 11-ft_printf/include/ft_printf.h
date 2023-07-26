@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print.c                                       :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 20:22:12 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/02/13 20:22:15 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/03/16 19:16:34 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/04/01 14:53:15 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isprint(int c)
-{
-	if ((c < 32) || (c > 126))
-		return (0);
-	return (1);
-}
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
+
+# include <unistd.h>
+# include <stdlib.h>
+# include <limits.h>
+# include <stdarg.h>
+# include <stdio.h>
+
+int	ft_printf(const char *format, ...);
+
+#endif

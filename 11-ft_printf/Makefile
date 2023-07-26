@@ -1,28 +1,32 @@
-NAME = ft_printf
-SRC = ft_printf.c
-LIB = libft.a
-OBJ = $(SRC:.c=.o)
-CC = gcc
+NAME = libftprintf.a
+
+SRCS = src/ft_printf.c \
+	   src/utils_1.c \
+	   src/utils_2.c
+
+OBJS = $(SRCS:.c=.o)
+
+INC = -I include
+
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(LIB)
-	$(CC) $(CFLAGS) $^ -o $@
-
-$(LIB):
-	make -C libft
+$(NAME): $(OBJS)
+	ar rcs $(NAME) $(OBJS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+
+main: main.c $(NAME)
+	$(CC) $(CFLAGS) main.c -L. -lftprintf -o main
 
 clean:
-	rm -f $(OBJ)
-	make -C libft clean
+	rm -f $(OBJS) main.o
 
 fclean: clean
-	rm -f $(NAME)
-	make -C libft fclean
+	rm -f $(NAME) main
 
 re: fclean all
 
