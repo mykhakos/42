@@ -39,12 +39,12 @@ def generate_lists(list_length=5, start=-10000, end=10000):
 try:
     results = []
 
-    rng = 1000
+    rng = 100
     for i in range(rng):
         
-        a = generate_lists(3)
+        a = generate_lists(100)
         #print(a)
-        print(f'Sorting list {i+1} / {rng}')
+        #print(f'Sorting list {i+1} / {rng}')
         
         sorter1 = Sorter(copy.copy(a), print=False)
 
@@ -53,7 +53,7 @@ try:
         act1 = sorter1.actions
         results.append(act1)
 
-        print(f'Sorted! Took {act1}  actions.\n')
+        #print(f'Sorted! Took {act1}  actions.\n')
 
         #if sorter1.actions > 12:
         #    print(a)

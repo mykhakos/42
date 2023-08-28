@@ -197,6 +197,7 @@ class Sorter:
         return _max
     
     def _med(self, lst: list[int]):
+        #return (self._max(lst) + self._min(lst))/2
         sorted_lst = sorted(lst)
         middle_index = int((len(sorted_lst) - 1)/2)
         return sorted_lst[middle_index]
@@ -362,13 +363,13 @@ class Sorter:
             print(f'Sorted:\t{self.a}')
                 
 
-
+"""
 #lst = [3, 1, 2, 5, 4]
 lst = [4, 3, 5, 1, 2, 6]
 sorter = Sorter(lst, print=True)
 sorter.sort()
 
-
+"""
 
 
 
