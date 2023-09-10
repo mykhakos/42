@@ -14,7 +14,7 @@ void run_rot_ops(t_stack **stack_a, t_stack **stack_b, t_rot_ops **ops_ptr)
     run_rot_op(stack_b, rotate, ops->rb, "rb");
     run_rot_op(stack_b, reverse_rotate, ops->rrb, "rrb");
     run_rot_op_double(dstack, rotate, ops->rr, "rr");
-    run_rot_op_double(dstack, rotate, ops->rrr, "rrr");
+    run_rot_op_double(dstack, reverse_rotate, ops->rrr, "rrr");
     free(dstack);
     free(ops);
     *ops_ptr = NULL;

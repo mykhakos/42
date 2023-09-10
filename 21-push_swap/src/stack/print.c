@@ -3,7 +3,8 @@
 
 void print_stack(t_stack *stack, char *name)
 {
-    ft_printf("stack %s: ", name);
+    if (name && 0)
+        return ;
     while (stack)
     {
         ft_printf("%i ", stack->value);

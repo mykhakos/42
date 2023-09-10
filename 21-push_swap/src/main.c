@@ -29,6 +29,9 @@ int main(int argc, char **argv)
     free(argv_int);
     //print_stack(stack_a, "a");
     sort(&stack_a, &stack_b);
-    //print_stack(stack_a, "b");
+    if (is_sorted(stack_a) == 0)
+        print_stack(stack_a, "a");
+    else
+        ft_printf("%s\n", "sorted.\n");
     deallocate_stack(&stack_a);
 }

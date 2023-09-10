@@ -38,14 +38,8 @@ t_rot_ops *find_opt_rots_push_value_to_a(t_stack *stack_a,
     rot_variants = malloc(sizeof(t_rot_ops *) * 5);
     if (!rot_variants)
         return (NULL);
-    //ft_printf("%s: ", "before");
-    //print_stack(stack_a, "a");
     rot_ops_all.ra = rots_direct(stack_a, value, is_ready_for_push);
-    //ft_printf("%s:  ", "after");
-    //print_stack(stack_a, "a");
-
     rot_ops_all.rra = rots_reverse(stack_a, value, is_ready_for_push);
-    //print_stack(stack_a, "a");
     rot_ops_all.rb = rots_direct(stack_b, value, is_first);
     rot_ops_all.rrb = rots_reverse(stack_b, value, is_first);
     rot_variants[0] = create_rot_ops(rot_ops_all.ra, rot_ops_all.rb, 0, 0);
@@ -60,14 +54,14 @@ t_rot_ops *find_opt_rots_push_to_a(t_stack *stack_a, t_stack *stack_b)
 {
     t_rot_ops *rots_opt;
     t_rot_ops *rots_temp;
+    t_stack *stack_b_ptr_cpy;
 
     rots_opt = find_opt_rots_push_value_to_a(stack_a, stack_b, stack_b->value);
-    stack_b = stack_b->next;
-
-    while (stack_b != NULL)
+    stack_b_ptr_cpy = stack_b->next;
+    while (stack_b_ptr_cpy != NULL)
     {
         rots_temp = find_opt_rots_push_value_to_a(
-            stack_a, stack_b, stack_b->value);
+            stack_a, stack_b, stack_b_ptr_cpy->value);
         if (rots_temp->total < rots_opt->total)
         {
             free(rots_opt);
@@ -77,7 +71,7 @@ t_rot_ops *find_opt_rots_push_to_a(t_stack *stack_a, t_stack *stack_b)
         {
             free(rots_temp);
         }
-        stack_b = stack_b->next;
+        stack_b_ptr_cpy = stack_b_ptr_cpy->next;
     }
     return (rots_opt);
 }

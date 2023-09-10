@@ -16,8 +16,8 @@ t_rot_ops *create_rot_ops(int ra, int rb, int rra, int rrb)
     if (ops == NULL)
         exit(1);
     ops->rr = get_min(ra, rb);
-    ops->ra = ra;// - ops->rr;
-    ops->rb = rb;// - ops->rr;
+    ops->ra = ra - ops->rr;
+    ops->rb = rb - ops->rr;
     ops->rrr = get_min(rra, rrb);
     ops->rra = rra - ops->rrr;
     ops->rrb = rrb - ops->rrr;

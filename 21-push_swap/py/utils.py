@@ -16,11 +16,15 @@ class Sorter:
     def _do_action(self, name: str):
         self.actions += 1
         if self.print:
+            #print(name)
+            #"""
             print(f'{self.actions}. {name}')
             print('-'*10)
-            print(f'A: {self.a}')
-            print(f'B: {self.b}')
+            print(f'A: {" ".join(str(i) for i in self.a)}')
+            print(f'B: {" ".join(str(i) for i in self.b)}')
             print()
+            #"""
+
 
     def sa(self):
         """Swaps the first two elements at the top of stack a. 
@@ -197,7 +201,7 @@ class Sorter:
         return _max
     
     def _med(self, lst: list[int]):
-        #return (self._max(lst) + self._min(lst))/2
+        return (self._max(lst) + self._min(lst))/2
         sorted_lst = sorted(lst)
         middle_index = int((len(sorted_lst) - 1)/2)
         return sorted_lst[middle_index]
