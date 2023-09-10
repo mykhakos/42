@@ -8,7 +8,7 @@ void rot_a_until_min_a_is_first(t_stack **stack_a, t_stack **stack_b)
     run_rot_ops(stack_a, stack_b, &next_rot_ops);
 }
 
-void push_to_b_until_a_has_3(t_stack **stack_a, t_stack **stack_b)
+static void push_to_b_until_a_has_3(t_stack **stack_a, t_stack **stack_b)
 {
     while (find_len(*stack_a) > 3)
     {
@@ -17,11 +17,9 @@ void push_to_b_until_a_has_3(t_stack **stack_a, t_stack **stack_b)
     }
 }
 
-void push_to_a_until_b_is_empty(t_stack **stack_a, t_stack **stack_b)
+static void push_to_a_until_b_is_empty(t_stack **stack_a, t_stack **stack_b)
 {
-    t_rot_ops *next_rot_ops;
-
-    while (find_len(&stack_b) != 0)
+    while (find_len(*stack_b) != 0)
     {
         run_push_op(stack_b, stack_a, 1, "pa");
     }

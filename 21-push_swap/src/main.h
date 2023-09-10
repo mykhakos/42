@@ -2,6 +2,8 @@
 #define MAIN_H
 
 #include "stack/stack.h"
-#include "push_swap_ops/ops.h"
+#include "sorter/sorter.h"
+#include "push_swap_ops/push_swap_ops.h"
+#include "input_validation/input_validation.h"
 
 #endif

@@ -1,5 +1,5 @@
 NAME = push_swap
-SRC = main.c libft/libft.a src/linked_list.c
+SRC = $(wildcard src/**/*.c src/*.c) 
 OBJ = $(SRC:.c=.o)
 LIBFT = libft/libft.a
 CC = gcc
@@ -8,13 +8,13 @@ CFLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJ)
-	$(CC) $(CFLAGS) -Llibft -lft -o $(NAME) $(OBJ)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -Llibft -lft
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT):
-	make -C libft bonus
+	make -C libft
 
 clean:
 	rm -f $(OBJ)

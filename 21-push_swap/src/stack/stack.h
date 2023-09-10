@@ -14,25 +14,13 @@
         struct s_stack **b;
     } t_double_stack;
 
-    typedef struct s_stack_params {
-        int get_min;
-        int med;
-        int max;
-        int len;
-    } t_stack_params;
-
-    t_stack *create_node(int value);
-    void insert_node_beginning(t_stack **root, int value);
-    void insert_node_after(t_stack *node, int value);
-    void insert_node_end(t_stack **root, int value);
-    void remove_node(t_stack **root, int value);
-    void deallocate_stack(t_stack **root);
-    void reverse_stack(t_stack **root);
+    t_stack *create_stack(int *values, int values_count);
+    t_stack *copy_stack(t_stack *stack);
+    t_double_stack *create_double_stack(t_stack **stack_a, t_stack **stack_b);
+    void deallocate_stack(t_stack **stack);
     int find_min(t_stack *stack);
     int find_max(t_stack *stack);
     int find_len(t_stack *stack);
-    int find_value_index(t_stack *stack, int value);
-    int is_first(t_stack *stack, int value);
-    int is_ready_for_push(t_stack *stack, int value);
-    t_double_stack *create_double_stack(t_stack **stack_a, t_stack **stack_b);
+    t_stack *find_last(t_stack *stack);
+    void print_stack(t_stack *stack, char *name);
 #endif

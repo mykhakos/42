@@ -1,4 +1,4 @@
-# include "sorter.h"
+#include "sorter.h"
 
 
 void run_rot_ops(t_stack **stack_a, t_stack **stack_b, t_rot_ops **ops_ptr)

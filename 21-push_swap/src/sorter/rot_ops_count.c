@@ -4,18 +4,34 @@
 int rots_direct(t_stack *stack, int value, int (*cond) (t_stack *, int))
 {
     int rots;
+    int first_val;
 
     if (stack == NULL)
         return (-1);
     rots = 0;
-    while (stack != NULL)
+    first_val = stack->value;
+    //ft_printf("%s: ", "before");
+    //print_stack(stack, "a");
+    while (1)
     {
         if (cond(stack, value))
+        {
+            //ft_printf("%s:  ", "after");
+            //print_stack(stack, "a");
+            //ft_printf("\t%s\n", "(cond satisfied)");
             return (rots);
-        stack = stack->next;
+        }
+        //ft_printf("%s:  ", "after");
+        //print_stack(stack, "a");
+        //ft_printf("\t%s\n", "(cond not satisfied, before rot)");         
+        rotate(&stack);
+        //ft_printf("%s:  ", "after");
+        //print_stack(stack, "a");
+        //ft_printf("\t%s\n", "(cond not satisfied, after rot)"); 
+        if (stack->value == first_val)
+            return (-1);
         rots += 1;
     }
-    return (-1);
 }
 
 int rots_reverse(t_stack *stack, int value, int (*cond) (t_stack *, int))

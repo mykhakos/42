@@ -1,22 +1,34 @@
 #include "main.h"
-#include <stdio.h>
 
 
-int main(int argc, char * argv[])
+int main(int argc, char **argv)
 {
-    t_stack *root;
-    t_stack *curr_node;
+    t_stack *stack_a;
+    t_stack *stack_b;
+    int *argv_int;
+    int i;
 
-    root = create_node(1);
-
-    insert_node_end(&root, 2);
-    insert_node_end(&root, 3);
-    curr_node = root;
-    while (curr_node != NULL)
+    while (argc == 1)
+        exit_with_error_msg(
+            0, "Enter a list of integers to sort (example: 2 1 3 6 5 8).");
+    argv_int = malloc((argc - 1) * sizeof(int));
+    if (argv_int == NULL)
+        return(1);
+    i = 0;
+    while (i < argc - 1)
     {
-        printf("%d\n", curr_node->value);
-        curr_node = curr_node->next;
+        if (!is_number(argv[i + 1]) || !is_int(argv[i + 1]))
+            exit_with_error_msg(0, "Error");
+        argv_int[i] = ft_atoi(argv[i + 1]);
+        i++;
     }
-    deallocate_stack(&root);
-    return (0);
+    if (has_dup(argv_int, argc - 1))
+            exit_with_error_msg(0, "Error");
+    stack_a = create_stack(argv_int, argc - 1);
+    stack_b = NULL;
+    free(argv_int);
+    //print_stack(stack_a, "a");
+    sort(&stack_a, &stack_b);
+    //print_stack(stack_a, "b");
+    deallocate_stack(&stack_a);
 }

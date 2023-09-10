@@ -1,14 +1,18 @@
 #include "sorter.h"
 
 
-void push_to_b_until_a_has_3_with_presort(t_stack **stack_a, t_stack **stack_b)
+#include <stdio.h>
+
+
+static void push_to_b_until_a_has_3_with_presort(
+    t_stack **stack_a, t_stack **stack_b)
 {
     int min_a;
     int med_a;
     int max_a;
 
-    min_a = find_min(&stack_a);
-    max_a = find_max(&stack_a);
+    min_a = find_min(*stack_a);
+    max_a = find_max(*stack_a);
     med_a = ((min_a + max_a) / 2);
     while (find_len(*stack_a) > 3)
     {
@@ -16,22 +20,56 @@ void push_to_b_until_a_has_3_with_presort(t_stack **stack_a, t_stack **stack_b)
         {
             run_rot_op(stack_a, rotate, 1, "ra");
         }
-        else 
+        else if ((*stack_a)->value > med_a)
         {
-            run_push_op(stack_a, stack_a, 1, "pb");
-            if ((*stack_a)->value > med_a)
-                run_rot_op(stack_b, rotate, 1, "rb");
+            run_push_op(stack_a, stack_b, 1, "pb");
+            run_rot_op(stack_b, rotate, 1, "rb");
+        }
+        else
+        {
+            run_push_op(stack_a, stack_b, 1, "pb"); 
         }
     }
 }
 
-void push_to_a_until_b_is_empty(t_stack **stack_a, t_stack **stack_b)
+void print_rot_ops(t_rot_ops *ops)
+{
+    ft_printf("ra: %i\n", ops->ra);
+    ft_printf("rb: %i\n", ops->rb);
+    ft_printf("rr: %i\n", ops->rr);
+    ft_printf("rra: %i\n", ops->rra);
+    ft_printf("rrb: %i\n", ops->rrb);
+    ft_printf("rrr: %i\n", ops->rrr);
+    ft_printf("ttl: %i\n", ops->total);
+}
+
+
+
+
+
+static void push_to_a_until_b_is_empty(t_stack **stack_a, t_stack **stack_b)
 {
     t_rot_ops *next_rot_ops;
+    t_stack *stack_a_cpy;
+    t_stack *stack_b_cpy;
 
     while (find_len(*stack_b) != 0)
     {
-        next_rot_ops = find_opt_rots_push_to_a(stack_a, stack_b);
+        stack_a_cpy = copy_stack(*stack_a);
+        stack_b_cpy = copy_stack(*stack_b);
+        next_rot_ops = find_opt_rots_push_to_a(stack_a_cpy, stack_b_cpy);
+        deallocate_stack(&stack_a_cpy);
+        deallocate_stack(&stack_b_cpy);
+        //
+        //print_stack(*stack_a, "a");
+        //print_stack(*stack_b, "b");
+        //print_rot_ops(next_rot_ops);
+        char msg[100];
+        char *e = "e";
+        fgets(msg, sizeof msg, stdin);
+        if (msg == e)
+            exit(1);
+        //
         run_rot_ops(stack_a, stack_b, &next_rot_ops);
         run_push_op(stack_b, stack_a, 1, "pa");
     }
@@ -42,4 +80,5 @@ void sort_7_plus(t_stack **stack_a, t_stack **stack_b)
     push_to_b_until_a_has_3_with_presort(stack_a, stack_b);
     sort_3(stack_a);
     push_to_a_until_b_is_empty(stack_a, stack_b);
+    
 }
