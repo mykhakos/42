@@ -35,6 +35,9 @@ SRC	=	ft_atoi.c		\
 		ft_substr.c		\
 		ft_tolower.c	\
 		ft_toupper.c	\
+		ft_find_nl.c	\
+		ft_get_next_line.c	\
+		ft_printf.c	\
 
 SRC_BONUS =	ft_lstadd_back.c	\
 			ft_lstadd_front.c	\

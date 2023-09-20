@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnr.c                                        :+:      :+:    :+:   */
+/*   ft_find_nl.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/18 20:24:23 by kmykhail          #+#    #+#             */
-/*   Updated: 2022/02/21 20:24:32 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/04/28 13:31:17 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/04/28 13:31:18 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putnbr_fd(int n, int fd)
+int	ft_find_nl(const char *s)
 {
-	if (n == INT_MIN)
+	int	i;
+
+	i = 0;
+	while (s[i])
 	{
-		ft_putstr_fd("-2147483648", fd);
-		return ;
+		if (s[i] == '\n')
+			return (i + 1);
+		i++;
 	}
-	if (n < 0)
-	{
-		ft_putchar_fd('-', fd);
-		n = -n;
-	}
-	if (n / 10 > 0)
-	{
-		ft_putnbr_fd(n / 10, fd);
-		ft_putnbr_fd(n % 10, fd);
-	}
-	else
-	{
-		ft_putchar_fd(n + '0', fd);
-	}
+	return (-1);
 }
