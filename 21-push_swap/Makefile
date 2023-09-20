@@ -1,7 +1,14 @@
 NAME = push_swap
-SRC = $(wildcard src/**/*.c src/*.c) 
+CHECKER = checker
+
+SRC = $(wildcard src/**/*.c src/main.c) 
+CHECK_SRC = $(wildcard src/**/*.c src/checker.c)
+
 OBJ = $(SRC:.c=.o)
+CHECK_OBJ = ${CHECK_SRC:.c=.o}
+
 LIBFT = libft/libft.a
+
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
@@ -25,5 +32,11 @@ fclean: clean
 	make -C libft fclean
 
 re: fclean all
+
+$(CHECKER): $(LIBFT) $(CHECK_OBJ)
+	$(CC) $(CFLAGS) -o $(CHECKER) $(CHECK_OBJ) -Llibft -lft
+
+bonus: $(LIBFT) $$(CHECK_OBJ)
+	$(CC) $(CFLAGS) -o $(CHECKER) $(CHECK_OBJ) -Llibft -lft
 
 .PHONY: all clean fclean re

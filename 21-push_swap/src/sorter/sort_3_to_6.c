@@ -34,8 +34,13 @@ void sort_3(t_stack **stack)
     top = (*stack)->value;
     middle = (*stack)->next->value;
     bottom = (*stack)->next->next->value;
-    if ((top < bottom && bottom < middle) || ( bottom < middle && middle < top) || (middle < top && top < bottom))
+    if (
+        (top < bottom && bottom < middle) ||
+        (bottom < middle && middle < top) ||
+        (middle < top && top < bottom))
+    {
         run_swap_op(stack, 1, "sa");
+    }
 }
 
 void sort_4_to_6(t_stack **stack_a, t_stack **stack_b)
