@@ -36,7 +36,7 @@ re: fclean all
 $(CHECKER): $(LIBFT) $(CHECK_OBJ)
 	$(CC) $(CFLAGS) -o $(CHECKER) $(CHECK_OBJ) -Llibft -lft
 
-bonus: $(LIBFT) $$(CHECK_OBJ)
+bonus: $(LIBFT) $(CHECK_OBJ)
 	$(CC) $(CFLAGS) -o $(CHECKER) $(CHECK_OBJ) -Llibft -lft
 
 .PHONY: all clean fclean re
