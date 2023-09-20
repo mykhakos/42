@@ -15,7 +15,6 @@ SRC	=	ft_atoi.c		\
 		ft_memcpy.c		\
 		ft_memmove.c	\
 		ft_memset.c		\
-		ft_printf.c		\
 		ft_putchar_fd.c	\
 		ft_putendl_fd.c	\
 		ft_putnbr_fd.c	\
@@ -36,6 +35,9 @@ SRC	=	ft_atoi.c		\
 		ft_substr.c		\
 		ft_tolower.c	\
 		ft_toupper.c	\
+		ft_find_nl.c	\
+		ft_get_next_line.c	\
+		ft_printf.c	\
 
 SRC_BONUS =	ft_lstadd_back.c	\
 			ft_lstadd_front.c	\
@@ -46,6 +48,7 @@ SRC_BONUS =	ft_lstadd_back.c	\
 			ft_lstmap.c			\
 			ft_lstnew.c			\
 			ft_lstsize.c		\
+
 
 OBJ = $(SRC:.c=.o)
 OBJ_BONUS = $(SRC_BONUS:.c=.o)
