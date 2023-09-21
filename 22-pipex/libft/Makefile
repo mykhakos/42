@@ -1,5 +1,4 @@
 NAME = libft.a
-
 HEADER = libft.h
 
 SRC	=	ft_atoi.c		\
@@ -20,7 +19,6 @@ SRC	=	ft_atoi.c		\
 		ft_putendl_fd.c	\
 		ft_putnbr_fd.c	\
 		ft_putstr_fd.c	\
-		ft_printf.c		\
 		ft_split.c		\
 		ft_strchr.c		\
 		ft_strdup.c		\
@@ -37,7 +35,9 @@ SRC	=	ft_atoi.c		\
 		ft_substr.c		\
 		ft_tolower.c	\
 		ft_toupper.c	\
-
+		ft_find_nl.c	\
+		ft_get_next_line.c	\
+		ft_printf.c	\
 
 SRC_BONUS =	ft_lstadd_back.c	\
 			ft_lstadd_front.c	\
@@ -51,13 +51,12 @@ SRC_BONUS =	ft_lstadd_back.c	\
 
 
 OBJ = $(SRC:.c=.o)
-
 OBJ_BONUS = $(SRC_BONUS:.c=.o)
 
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-.PHONY: all bonus clean fclean re
+.PHONY: all bonus clean fclean re so
 
 all: $(NAME)
 
@@ -71,9 +70,13 @@ bonus: $(OBJ) $(OBJ_BONUS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJ)
+	rm -rf $(OBJ) $(OBJ_BONUS)
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) libft.so
 
 re: fclean all
+
+so:
+	$(CC) -nostartfiles -fPIC $(CFLAGS) $(SRC) $(SRC_BONUS)
+	gcc -nostartfiles -shared -o libft.so $(OBJ) $(OBJ_BONUS)

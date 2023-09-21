@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	is_space(char c)
+static int	is_space(char c)
 {
 	if (c == ' ' || c == '\f' || c == '\n'
 		|| c == '\r' || c == '\t' || c == '\v')
@@ -18,14 +18,14 @@ int	is_space(char c)
 	return (0);
 }
 
-int	is_num(char c)
+static int	is_num(char c)
 {
 	if ((c >= '0') && (c <= '9'))
 		return (1);
 	return (0);
 }
 
-int	is_sign(char c)
+static int	is_sign(char c)
 {
 	if ((c == '+') || (c == '-'))
 		return (1);
