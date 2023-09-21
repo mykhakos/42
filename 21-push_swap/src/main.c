@@ -21,5 +21,6 @@ int main(int argc, char **argv)
     free(argv_int);
     sort(&stack_a, &stack_b);
     deallocate_stack(&stack_a);
+    deallocate_stack(&stack_b);
     return (0);
 }
