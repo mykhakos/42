@@ -1,27 +1,40 @@
-#ifndef STACK_STACK_H
-    #define STACK_STACK_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   stack.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/21 18:03:18 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/09/21 18:32:40 by kmykhail         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-    #include <stdlib.h>
+#ifndef STACK_H
+# define STACK_H
 
-    typedef struct s_stack
-    {
-        int value;
-        struct s_stack *next;
-    } t_stack;
+# include <stdlib.h>
 
-    typedef struct s_double_stack {
-        struct s_stack **a;
-        struct s_stack **b;
-    } t_double_stack;
+typedef struct s_stack
+{
+	int				value;
+	struct s_stack	*next;
+}					t_stack;
 
-    t_stack *create_stack(int *values, int values_count);
-    t_stack *copy_stack(t_stack *stack);
-    t_stack *find_last(t_stack *stack);
-    t_double_stack *create_double_stack(t_stack **stack_a, t_stack **stack_b);
-    void deallocate_stack(t_stack **stack);
-    int find_min(t_stack *stack);
-    int find_max(t_stack *stack);
-    int find_len(t_stack *stack);
-    int is_sorted(t_stack *stack);
-    int is_in_order(t_stack *stack);
+typedef struct s_double_stack
+{
+	struct s_stack	**a;
+	struct s_stack	**b;
+}					t_double_stack;
+
+t_stack				*create_stack(int *values, int values_count);
+t_stack				*copy_stack(t_stack *stack);
+t_stack				*find_last(t_stack *stack);
+t_double_stack		*create_double_stack(t_stack **stack_a, t_stack **stack_b);
+void				deallocate_stack(t_stack **stack);
+int					find_min(t_stack *stack);
+int					find_max(t_stack *stack);
+int					find_len(t_stack *stack);
+int					is_sorted(t_stack *stack);
+int					is_in_order(t_stack *stack);
 #endif

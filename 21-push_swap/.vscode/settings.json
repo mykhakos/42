@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "sorter.h": "c"
+        "sorter.h": "c",
+        "libft_og.h": "c",
+        "libft.h": "c"
     }
 }

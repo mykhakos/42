@@ -1,3 +1,6 @@
 *.o
 *.a
+.vscode
 push_swap
+checker
+!checker/
