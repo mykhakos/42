@@ -1,20 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 13:43:05 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/04/28 13:43:07 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/03/16 19:26:41 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/03/16 19:26:43 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include "get_next_line/get_next_line.h"
-# include "ft_printf/ft_printf.h"
+char	*ft_strnstr(const char *s1, const char *s2, size_t n)
+{
+	size_t	s2_len;
 
-#endif
+	if ((!s1 && !n) || (!s2 && !n))
+		return (NULL);
+	s2_len = ft_strlen(s2);
+	if (s2_len == 0)
+		return ((char *)s1);
+	while (*s1 != '\0' && n >= s2_len)
+	{
+		if (ft_strncmp(s1, s2, s2_len) == 0)
+			return ((char *)s1);
+		s1++;
+		n--;
+	}
+	return (NULL);
+}

@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 13:43:05 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/04/28 13:43:07 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/03/15 19:30:54 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/03/15 19:30:56 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include "get_next_line/get_next_line.h"
-# include "ft_printf/ft_printf.h"
+void	*ft_memchr(const void *str, int chr, size_t n)
+{
+	const unsigned char	*s;
+	unsigned char		c;
 
-#endif
+	s = (const unsigned char *)str;
+	c = (unsigned char)chr;
+	while (n--)
+	{
+		if (*s == c)
+			return ((void *)s);
+		s++;
+	}
+	return (NULL);
+}

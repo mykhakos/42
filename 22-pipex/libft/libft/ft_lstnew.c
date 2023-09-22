@@ -1,20 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 13:43:05 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/04/28 13:43:07 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/03/15 18:08:21 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/03/15 18:08:23 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include "get_next_line/get_next_line.h"
-# include "ft_printf/ft_printf.h"
+t_list	*ft_lstnew(void *content)
+{
+	t_list	*new;
 
-#endif
+	new = malloc(sizeof(t_list));
+	if (!new)
+		return (NULL);
+	new->content = content;
+	new->next = NULL;
+	return (new);
+}

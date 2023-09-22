@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_find_nl.c                                       :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 13:31:17 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/04/28 13:31:18 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/04/28 13:43:05 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/04/28 13:43:07 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-int	ft_find_nl(const char *s)
-{
-	int	i;
+# include <stdlib.h>
+# include <unistd.h>
+# include "../libft/libft.h"
 
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == '\n')
-			return (i + 1);
-		i++;
-	}
-	return (-1);
-}
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 64
+# endif
+
+# ifndef FD_MAX
+#  define FD_MAX 1024
+# endif
+
+char	*get_next_line(int fd);
+int		ft_find_nl(const char *s);
+
+#endif

@@ -1,20 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 13:43:05 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/04/28 13:43:07 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/03/16 18:57:18 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/03/16 18:57:19 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+void	ft_striteri(char *s, void (*f)(unsigned int, char*))
+{
+	unsigned int	i;
 
-# include "libft/libft.h"
-# include "get_next_line/get_next_line.h"
-# include "ft_printf/ft_printf.h"
-
-#endif
+	if (!s || !f)
+		return ;
+	i = 0;
+	while (s[i] != '\0')
+	{
+		f(i, &s[i]);
+		i++;
+	}
+}

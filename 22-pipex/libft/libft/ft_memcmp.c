@@ -1,20 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_memcmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 13:43:05 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/04/28 13:43:07 by kmykhail         ###   ########.fr       */
+/*   Created: 2022/11/23 15:32:13 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/02/16 15:32:15 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include "get_next_line/get_next_line.h"
-# include "ft_printf/ft_printf.h"
+int	ft_memcmp(const void *str1, const void *str2, size_t n)
+{
+	const unsigned char	*s1;
+	const unsigned char	*s2;
 
-#endif
+	s1 = (const unsigned char *)str1;
+	s2 = (const unsigned char *)str2;
+	while (n--)
+	{
+		if (*s1 != *s2)
+			return (*s1 - *s2);
+		s1++;
+		s2++;
+	}
+	return (0);
+}

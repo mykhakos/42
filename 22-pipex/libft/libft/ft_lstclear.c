@@ -1,20 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 13:43:05 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/04/28 13:43:07 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/03/15 18:06:53 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/03/15 18:06:56 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include "get_next_line/get_next_line.h"
-# include "ft_printf/ft_printf.h"
+void	ft_lstclear(t_list **lst, void (*del)(void*))
+{
+	t_list	*current;
+	t_list	*next;
 
-#endif
+	if (lst == NULL || del == NULL)
+		return ;
+	current = *lst;
+	while (current != NULL)
+	{
+		next = current->next;
+		ft_lstdelone(current, del);
+		current = next;
+	}
+	*lst = NULL;
+}

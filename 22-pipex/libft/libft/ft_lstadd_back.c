@@ -1,20 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 13:43:05 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/04/28 13:43:07 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/03/15 18:05:13 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/03/15 18:05:16 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include "get_next_line/get_next_line.h"
-# include "ft_printf/ft_printf.h"
+void	ft_lstadd_back(t_list **lst, t_list *new)
+{
+	t_list	*last;
 
-#endif
+	if (lst == NULL || new == NULL)
+		return ;
+	if (*lst != NULL)
+	{
+		last = ft_lstlast(*lst);
+		last->next = new;
+	}
+	else
+	{
+		*lst = new;
+	}
+}

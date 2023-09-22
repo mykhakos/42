@@ -1,36 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnr.c                                        :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/18 20:24:23 by kmykhail          #+#    #+#             */
-/*   Updated: 2022/02/21 20:24:32 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/04/28 13:43:05 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/04/28 13:43:07 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-void	ft_putnbr_fd(int n, int fd)
-{
-	if (n == INT_MIN)
-	{
-		ft_putstr_fd("-2147483648", fd);
-		return ;
-	}
-	if (n < 0)
-	{
-		ft_putchar_fd('-', fd);
-		n = -n;
-	}
-	if (n / 10 > 0)
-	{
-		ft_putnbr_fd(n / 10, fd);
-		ft_putnbr_fd(n % 10, fd);
-	}
-	else
-	{
-		ft_putchar_fd(n + '0', fd);
-	}
-}
+# include <stdlib.h>
+# include <unistd.h>
+# include "../libft/libft.h"
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 64
+# endif
+
+# ifndef FD_MAX
+#  define FD_MAX 1024
+# endif
+
+char	*get_next_line(int fd);
+int		ft_find_nl(const char *s);
+
+#endif

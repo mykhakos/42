@@ -1,20 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 13:43:05 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/04/28 13:43:07 by kmykhail         ###   ########.fr       */
+/*   Created: 2023/03/16 18:49:43 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/03/16 18:49:46 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include "get_next_line/get_next_line.h"
-# include "ft_printf/ft_printf.h"
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+{
+	char			*s_modif;
+	unsigned int	s_len;
+	unsigned int	i;
 
-#endif
+	if (!s || !f)
+		return (NULL);
+	s_len = ft_strlen(s);
+	s_modif = malloc((s_len + 1) * sizeof(char));
+	if (!s_modif)
+		return (NULL);
+	i = 0;
+	while (i < s_len)
+	{
+		s_modif[i] = f(i, s[i]);
+		i++;
+	}
+	s_modif[i] = '\0';
+	return (s_modif);
+}
