@@ -1,61 +1,66 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ops_run.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/21 17:54:03 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/09/21 18:09:08 by kmykhail         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap_ops.h"
 
-
-void run_rot_op(t_stack **stack, 
-                int (*rot_op) (t_stack **), 
-                int repeat, 
-                char *op_name)
+void	run_rot_op(t_stack **stack, int (*rot_op)(t_stack **), int repeat,
+		char *op_name)
 {
-    int res;
+	int	res;
 
-    while (repeat--)
-    {
-        res = rot_op(stack);
-        if (res)
-            ft_printf("%s\n", op_name);
-    }
+	while (repeat--)
+	{
+		res = rot_op(stack);
+		if (res)
+			ft_printf("%s\n", op_name);
+	}
 }
 
-void run_rot_op_double(t_double_stack *dstack,
-                       int (*rot_op) (t_stack **), 
-                       int repeat, 
-                       char *op_name)
+void	run_rot_op_double(t_double_stack *dstack, int (*rot_op)(t_stack **),
+		int repeat, char *op_name)
 {
-    int res1;
-    int res2;
+	int	res1;
+	int	res2;
 
-    while (repeat--)
-    {
-        res1 = rot_op(dstack->a);
-        res2 = rot_op(dstack->b);
-        if (res1 || res2)
-            ft_printf("%s\n", op_name);
-    }
+	while (repeat--)
+	{
+		res1 = rot_op(dstack->a);
+		res2 = rot_op(dstack->b);
+		if (res1 || res2)
+			ft_printf("%s\n", op_name);
+	}
 }
 
-void run_push_op(t_stack **stack_from,
-                 t_stack **stack_to, 
-                 int repeat, 
-                 char *op_name)
+void	run_push_op(t_stack **stack_from, t_stack **stack_to, int repeat,
+		char *op_name)
 {
-    int res;
+	int	res;
 
-    while (repeat--)
-    {
-        res = push(stack_from, stack_to);
-        if (res)
-            ft_printf("%s\n", op_name); 
-    }    
+	while (repeat--)
+	{
+		res = push(stack_from, stack_to);
+		if (res)
+			ft_printf("%s\n", op_name);
+	}
 }
 
-void run_swap_op(t_stack **stack, int repeat, char *op_name)
+void	run_swap_op(t_stack **stack, int repeat, char *op_name)
 {
-    int res;
+	int	res;
 
-    while (repeat--)
-    {
-        res = swap(stack);
-        if (res)
-            ft_printf("%s\n", op_name);
-    }
+	while (repeat--)
+	{
+		res = swap(stack);
+		if (res)
+			ft_printf("%s\n", op_name);
+	}
 }
