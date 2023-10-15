@@ -54,6 +54,11 @@ int main(int argc, char **argv, char **env)
     t_command *commands_ptr;
     int pipefd[2];
 
+    if (argc != 5)
+    {
+        ft_printf("Invalid arg count (expected 4, got %i).\n", argc - 1);
+        exit(EXIT_SUCCESS);        
+    }
     commands = argv_to_commands_list(argc, argv, env);
     commands_ptr = commands;
     if (pipe(pipefd) == -1)
