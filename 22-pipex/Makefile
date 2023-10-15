@@ -1,28 +1,34 @@
 NAME = pipex
-SRC = main.c libft/libft.a
+
+SRC = $(shell find ./src -name '*.c')
+
 OBJ = $(SRC:.c=.o)
-LIBFT = libft/libft.a
+
+LIBFT_DIR_PATH = lib/libft
+LIBFT_LIB_FILE = libft.a
+LIBFT = $(LIBFT_DIR_PATH)/$(LIBFT_LIB_FILE)
+
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJ)
-	$(CC) $(CFLAGS) -Llibft -lft -o $(NAME) $(OBJ)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L$(LIBFT_DIR_PATH) -lft
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT):
-	make -C libft
+	make -C $(LIBFT_DIR_PATH)
 
 clean:
 	rm -f $(OBJ)
-	make -C libft clean
+	make -C $(LIBFT_DIR_PATH) clean
 
 fclean: clean
 	rm -f $(NAME)
-	make -C libft fclean
+	make -C $(LIBFT_DIR_PATH) fclean
 
 re: fclean all
 
