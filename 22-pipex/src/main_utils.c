@@ -1,5 +1,20 @@
 #include "../include/pipex.h"
 
+char **extract_env_paths(char **env)
+{
+    char *env_path_var;
+	char **env_paths;
+
+    env_path_var = get_env_var("PATH", env);
+	env_paths = ft_split(env_path_var, ':');
+    if (env_paths == NULL)
+    {
+        perror("Error splitting PATH");
+        exit(1);
+    }
+    return (env_paths);
+}
+
 void free_env_paths(char **env_paths)
 {
     char **env_paths_ptr;
@@ -17,17 +32,10 @@ t_command *argv_to_commands_list(int argc, char **argv, char **env)
 {
     t_command *commands;
     char **command_args;
-	char *env_path_var;
 	char **env_paths;
     int i;
 
-    env_path_var = get_env_var("PATH", env);
-	env_paths = ft_split(env_path_var, ':');
-    if (env_paths == NULL)
-    {
-        perror("Error splitting PATH");
-        exit(1);
-    }
+    env_paths = extract_env_paths(env);
     commands = NULL;
     i = 2;
     while (i < argc - 1)

@@ -1,8 +1,10 @@
 NAME = pipex
 
-SRC = $(shell find ./src -name '*.c')
+SRC = $(shell find ./src -name '*.c' ! -path ./src/main_bonus.c)
+SRC_BONUS = $(shell find ./src -name '*.c' ! -path ./src/main.c)
 
 OBJ = $(SRC:.c=.o)
+OBJ_BONUS = $(SRC_BONUS:.c=.o)
 
 LIBFT_DIR_PATH = lib/libft
 LIBFT_LIB_FILE = libft.a
@@ -22,6 +24,9 @@ $(NAME): $(LIBFT) $(OBJ)
 $(LIBFT):
 	make -C $(LIBFT_DIR_PATH)
 
+bonus: $(LIBFT) $(OBJ_BONUS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ_BONUS) -L$(LIBFT_DIR_PATH) -lft
+
 clean:
 	rm -f $(OBJ)
 	make -C $(LIBFT_DIR_PATH) clean
@@ -32,4 +37,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus

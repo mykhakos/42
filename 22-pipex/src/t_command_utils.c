@@ -33,25 +33,41 @@ void add_command(t_command **commands, char **command_args)
     }
 }
 
-void append_command(t_command **commands, t_command *command)
+void remove_command(t_command **commands, char *command)
 {
-    t_command *last;
+    t_command *to_remove;
 
     if (*commands == NULL)
     {
-        *commands = command;
+        return ;
     }
     else
     {
-        last = *commands;
-        while (last->next != NULL)
+        while ((*commands)->next != NULL)
         {
-            last = last->next;
+            if (ft_strncmp((*commands)->next->command_args[0], command, ft_strlen(command)) == 0)
+            {
+                to_remove = (*commands)->next;
+                (*commands)->next = (*commands)->next->next;
+                free(to_remove);
+            }
+            (*commands) = (*commands)->next;
         }
-        last->next = command;
     }
 }
 
+int count_commands(t_command *commands)
+{
+    int len;
+
+    len = 0;
+    while (commands != NULL)
+    {
+        commands = commands->next;
+        len++;
+    }
+    return (len);
+}
 
 void deallocate_commands(t_command **commands)
 {
