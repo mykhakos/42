@@ -1,78 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/24 17:53:25 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/10/24 20:40:11 by kmykhail         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/pipex.h"
 
-void exec_cmd1(char **cmd_args, int *pipefd, char *infile, char **env)
-{
-    pid_t pid;
+#define ARG_COUNT 4
 
-    pid = fork();
-    if (pid == -1)
-    {
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
-    if (pid == 0)
-    {
-        redirect_file_to_stdin(infile);
-        close(pipefd[0]);
-        dup2(pipefd[1], STDOUT_FILENO);
-        close(pipefd[1]);
-        if (execve(cmd_args[0], cmd_args, env) == -1)
-        {
-            perror("execve");
-            exit(EXIT_FAILURE);
-        }
-    }
+static void check_arg_count(int arg_count)
+{
+	if (arg_count != ARG_COUNT)
+	{
+		dup2(STDOUT_FILENO, STDERR_FILENO);
+		ft_printf("Invalid arg count (expected %i, got %i).\n", ARG_COUNT, arg_count);
+		exit(EXIT_FAILURE);
+	}
 }
 
-void exec_cmd2(char **cmd_args, int *pipefd, char *outfile, char **env)
+int	main(int argc, char **argv, char **env)
 {
-    pid_t pid;
+	t_command	*commands;
+	int			pipefd[2];
 
-    pid = fork();
-    if (pid == -1)
-    {
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
-    if (pid == 0)
-    {
-        close(pipefd[1]);
-        dup2(pipefd[0], STDIN_FILENO);
-        close(pipefd[0]);
-        redirect_stdout_to_file(outfile);
-        if (execve(cmd_args[0], cmd_args, env) == -1)
-        {
-            perror("execve");
-            exit(EXIT_FAILURE);
-        }
-    }
-}
-
-int main(int argc, char **argv, char **env)
-{
-    t_command *commands;
-    t_command *commands_ptr;
-    int pipefd[2];
-
-    if (argc != 5)
-    {
-        ft_printf("Invalid arg count (expected 4, got %i).\n", argc - 1);
-        exit(EXIT_SUCCESS);        
-    }
-    commands = argv_to_commands_list(argc, argv, env);
-    commands_ptr = commands;
-    if (pipe(pipefd) == -1)
-    {
-        perror("pipe");
-        exit(EXIT_FAILURE);
-    }
-    exec_cmd1(commands_ptr->command_args, pipefd, argv[1], env);
-    commands_ptr = commands_ptr->next;
-    exec_cmd2(commands_ptr->command_args, pipefd, argv[argc - 1], env);
-    close(pipefd[0]);
-    close(pipefd[1]);
-    wait(NULL);
-    wait(NULL);
-    deallocate_commands(&commands);
-    return (0);
+	check_arg_count(argc - 1);
+	commands = argv_to_commands_list(argc, argv, env);
+	if (pipe(pipefd) == -1)
+		perror_with_exit("pipe", EXIT_FAILURE);
+	exec_cmd_first(commands->command_args, pipefd, argv[1], env);
+	
+	exec_cmd_last(commands->next->command_args, pipefd, argv[4], env);
+	close(pipefd[0]);
+	close(pipefd[1]);
+	wait(NULL);
+	wait(NULL);
+	deallocate_commands(&commands);
+	return (0);
 }

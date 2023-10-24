@@ -1,82 +1,63 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/24 17:52:37 by kmykhail          #+#    #+#             */
+/*   Updated: 2023/10/24 20:40:15 by kmykhail         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/pipex.h"
 
-char **extract_env_paths(char **env)
+void perror_with_exit(char *msg, int errcode)
 {
-    char *env_path_var;
-	char **env_paths;
-
-    env_path_var = get_env_var("PATH", env);
-	env_paths = ft_split(env_path_var, ':');
-    if (env_paths == NULL)
-    {
-        perror("Error splitting PATH");
-        exit(1);
-    }
-    return (env_paths);
+	perror(msg);
+	exit(errcode);
 }
 
-void free_env_paths(char **env_paths)
+t_command	*argv_to_commands_list(int argc, char **argv, char **env)
 {
-    char **env_paths_ptr;
+	t_command	*commands;
+	char		**command_args;
+	char		**env_paths;
+	int			i;
 
-    env_paths_ptr = env_paths;
-    while (*env_paths_ptr != NULL)
-    {
-        free(*env_paths_ptr);
-        env_paths_ptr++;
-    }
-    free(env_paths);
+	env_paths = extract_env_paths(env);
+	commands = NULL;
+	i = 2;
+	while (i < argc - 1)
+	{
+		command_args = parse_args(argv[i], env_paths);
+		if (command_args == NULL)
+			perror_with_exit("Error formatting command", EXIT_FAILURE);
+		add_command(&commands, command_args);
+		i++;
+	}
+	free_env_paths(env_paths);
+	return (commands);
 }
 
-t_command *argv_to_commands_list(int argc, char **argv, char **env)
+void	redirect_file_to_stdin(char *file)
 {
-    t_command *commands;
-    char **command_args;
-	char **env_paths;
-    int i;
+	int	fd;
 
-    env_paths = extract_env_paths(env);
-    commands = NULL;
-    i = 2;
-    while (i < argc - 1)
-    {
-        command_args = parse_args(argv[i], env_paths);
-        if (command_args == NULL)
-        {
-            perror("Error formatting command");
-            exit(1);
-        }
-        add_command(&commands, command_args);
-        i++;
-    }
-    free_env_paths(env_paths);
-    return (commands);
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+		perror_with_exit(file, EXIT_FAILURE);
+	dup2(fd, STDIN_FILENO);
+	close(fd);
 }
 
-void redirect_file_to_stdin(char *file)
+void	redirect_stdout_to_file(char *file)
 {
-    int fd;
+	int	fd;
 
-    fd = open(file, O_RDONLY);
-    if (fd == -1)
-    {
-        perror("open");
-        exit(EXIT_FAILURE);
-    }
-    dup2(fd, STDIN_FILENO);
-    close(fd);
-}
-
-void redirect_stdout_to_file(char *file)
-{
-    int fd;
-
-    fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-    if (fd == -1)
-    {
-        perror("open");
-        exit(EXIT_FAILURE);
-    }
-    dup2(fd, STDOUT_FILENO);
-    close(fd);
+	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	if (fd == -1)
+		perror_with_exit(file, EXIT_FAILURE);
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
 }
