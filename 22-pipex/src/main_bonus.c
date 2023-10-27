@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:52:14 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/27 17:09:45 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/27 17:31:28 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	exec_cmd_multi(t_command *commands, char *infile, char *outfile,
 	int	(*pipefd)[2];
 
 	command_count = count_commands(commands);
-	pipefd = open_pipes(command_count - 1);
+	open_pipes(&pipefd, command_count - 1);
 	exec_cmd_first(commands->command_args, pipefd[0], infile, env);
 	close(pipefd[0][1]);
 	commands = commands->next;

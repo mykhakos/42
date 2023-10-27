@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 17:13:20 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/27 17:15:25 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/27 17:42:12 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,5 @@ void		exec_cmd_middle(char **cmd_args, int *pipefd_in,
 				int *pipefd_out, char **env);
 void		exec_cmd_single(char **cmd_args, char *infile,
 				char *outfile, char **env);
-int			(*open_pipes(int number))[2];
-
+void		open_pipes(int (**pipefd_ptr)[2], int number);
 #endif
