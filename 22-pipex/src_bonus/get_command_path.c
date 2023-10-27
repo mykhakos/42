@@ -6,11 +6,11 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:50:47 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/27 21:31:00 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/27 22:18:40 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include/pipex_bonus.h"
 
 static char	*join_path(char *prefix, char *path)
 {

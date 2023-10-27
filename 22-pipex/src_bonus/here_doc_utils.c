@@ -6,11 +6,11 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:51:41 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/27 17:12:10 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/27 22:18:39 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include/pipex_bonus.h"
 
 void	remove_here_doc_from_commands(t_command **commands)
 {

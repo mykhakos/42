@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:52:14 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/27 17:31:28 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/27 22:20:52 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include/pipex_bonus.h"
 
 #define MIN_ARG_COUNT 3
 #define MIN_ARG_COUNT_HERE_DOC 4
