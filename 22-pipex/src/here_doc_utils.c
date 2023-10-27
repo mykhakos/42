@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:51:41 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/24 20:49:42 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/27 17:12:10 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,22 @@ void	remove_here_doc_from_commands(t_command **commands)
 	free(temp);
 }
 
+int	is_limiter(char *limiter, char *line, int line_len)
+{
+	int	limiter_len;
+
+	if (line_len > 0 && line[line_len - 1] == '\n')
+		line_len = line_len - 1;
+	limiter_len = ft_strlen(limiter);
+	if ((ft_strncmp(line, limiter, line_len) == 0) && (limiter_len == line_len))
+		return (1);
+	return (0);
+}
+
 void	write_user_input_to_file(int file_fd, char *limiter, int *found_limiter)
 {
 	char	*line;
 	int		line_len;
-	int		line_len_no_nl;
 
 	while (1)
 	{
@@ -43,11 +54,7 @@ void	write_user_input_to_file(int file_fd, char *limiter, int *found_limiter)
 		if (line == NULL)
 			break ;
 		line_len = ft_strlen(line);
-		if (line_len > 0 && line[line_len - 1] == '\n')
-			line_len_no_nl = line_len - 1;
-		else
-			line_len_no_nl = line_len;
-		if (ft_strncmp(line, limiter, line_len_no_nl) == 0)
+		if (is_limiter(limiter, line, line_len))
 		{
 			*found_limiter = 1;
 			free(line);
@@ -58,7 +65,7 @@ void	write_user_input_to_file(int file_fd, char *limiter, int *found_limiter)
 	}
 }
 
-void	read_user_input(char *filename, char *limiter)
+void	read_and_save_user_input(char *filename, char *limiter)
 {
 	int	file_fd;
 	int	found_limiter;

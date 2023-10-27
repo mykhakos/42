@@ -28,7 +28,7 @@ bonus: $(LIBFT) $(OBJ_BONUS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ_BONUS) -L$(LIBFT_DIR_PATH) -lft
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ) $(OBJ_BONUS)
 	make -C $(LIBFT_DIR_PATH) clean
 
 fclean: clean

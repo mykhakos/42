@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:50:47 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/24 20:42:48 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/27 17:10:36 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ char	*get_exec_file_path(char *file, char **env_paths)
 
 	full_path = join_path(".", file);
 	if (access(full_path, F_OK) == 0)
-	{
 		return (full_path);
-	}
 	else
 	{
 		i = 0;
@@ -40,9 +38,7 @@ char	*get_exec_file_path(char *file, char **env_paths)
 		{
 			full_path = join_path(env_paths[i], file);
 			if (access(full_path, F_OK) == 0)
-			{
 				return (full_path);
-			}
 			else
 			{
 				free(full_path);

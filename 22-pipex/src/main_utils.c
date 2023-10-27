@@ -6,13 +6,13 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:52:37 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/24 20:40:15 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/27 17:12:37 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void perror_with_exit(char *msg, int errcode)
+void	perror_with_exit(char *msg, int errcode)
 {
 	perror(msg);
 	exit(errcode);

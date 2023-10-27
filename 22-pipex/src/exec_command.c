@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 18:39:27 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/24 20:53:44 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/27 17:19:43 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,10 @@ void	exec_cmd_single(char **cmd_args, char *infile, char *outfile,
 	}
 }
 
-int (*open_pipes(int number))[2]
+int	(*open_pipes(int number))[2]
 {
-	int(*pipefd)[2];
-	int i;
+	int	(*pipefd)[2];
+	int	i;
 
 	pipefd = malloc(number * sizeof(*pipefd));
 	if (!pipefd)

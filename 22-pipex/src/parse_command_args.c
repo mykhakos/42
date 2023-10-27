@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:54:27 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/24 20:40:12 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/27 17:05:41 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ static char	**split_args(char *command_args)
 		while (*command_args == ' ')
 			command_args++;
 		args[i] = get_next_arg(&command_args, command_args[0]);
-		//ft_printf("arg %i: %s\n", i, args[i]);
 		i++;
 	}
 	args[i] = NULL;
@@ -115,7 +114,6 @@ char	**parse_args(char *command, char **env_paths)
 	formatted = get_exec_file_path(command_args[0], env_paths);
 	if (formatted != NULL)
 	{
-		//ft_printf("formatted: %s\n", formatted);
 		free(command_args[0]);
 		command_args[0] = formatted;
 	}

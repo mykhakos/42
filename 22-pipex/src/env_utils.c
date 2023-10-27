@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 18:32:01 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/24 20:01:05 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/27 17:06:42 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	**extract_env_paths(char **env)
 
 void	free_env_paths(char **env_paths)
 {
-	char **env_paths_ptr;
+	char	**env_paths_ptr;
 
 	env_paths_ptr = env_paths;
 	while (*env_paths_ptr != NULL)
