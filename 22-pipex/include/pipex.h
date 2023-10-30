@@ -37,8 +37,8 @@ char		**extract_env_paths(char **env);
 void		free_env_paths(char **env_paths);
 t_command	*argv_to_commands_list(int argc, char **argv,
 				char **env);
-void		redirect_file_to_stdin(char *file);
-void		redirect_stdout_to_file(char *file);
+int			redirect_file_to_stdin(char *file);
+int			redirect_stdout_to_file(char *file);
 void		exec_cmd_first(char **cmd_args, int *pipefd,
 				char *infile, char **env);
 void		exec_cmd_last(char **cmd_args, int *pipefd,

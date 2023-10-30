@@ -32,7 +32,10 @@ t_command	*argv_to_commands_list(int argc, char **argv, char **env)
 	{
 		command_args = parse_args(argv[i], env_paths);
 		if (command_args == NULL)
+		{
+			deallocate_commands(&commands);
 			perror_with_exit("Error formatting command", EXIT_FAILURE);
+		}
 		add_command(&commands, command_args);
 		i++;
 	}
@@ -40,24 +43,32 @@ t_command	*argv_to_commands_list(int argc, char **argv, char **env)
 	return (commands);
 }
 
-void	redirect_file_to_stdin(char *file)
+int	redirect_file_to_stdin(char *file)
 {
 	int	fd;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		perror_with_exit(file, EXIT_FAILURE);
+	{
+		perror(file);
+		return (-1);
+	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
+	return (0);
 }
 
-void	redirect_stdout_to_file(char *file)
+int	redirect_stdout_to_file(char *file)
 {
 	int	fd;
 
 	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fd == -1)
-		perror_with_exit(file, EXIT_FAILURE);
+	{
+		perror(file);
+		return (-1);
+	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+	return (0);
 }

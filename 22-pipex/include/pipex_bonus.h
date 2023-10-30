@@ -37,8 +37,8 @@ char		**extract_env_paths(char **env);
 void		free_env_paths(char **env_paths);
 t_command	*argv_to_commands_list(int argc, char **argv,
 				char **env);
-void		redirect_file_to_stdin(char *file);
-void		redirect_stdout_to_file(char *file);
+int			redirect_file_to_stdin(char *file);
+int			redirect_stdout_to_file(char *file);
 void		remove_here_doc_from_commands(t_command **commands);
 void		read_and_save_user_input(char *filename, char *limiter);
 void		remove_file(char *filename);

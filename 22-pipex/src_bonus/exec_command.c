@@ -19,16 +19,19 @@ void	exec_cmd_first(char **cmd_args, int *pipefd, char *infile, char **env)
 	pid = fork();
 	if (pid == -1)
 	{
-		perror_with_exit("fork", EXIT_FAILURE);
+		perror("fork");
+		return ;
 	}
 	if (pid == 0)
 	{
-		redirect_file_to_stdin(infile);
-		close(pipefd[0]);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-		if (execve(cmd_args[0], cmd_args, env) == -1)
-			perror_with_exit("execve", EXIT_FAILURE);
+		if (redirect_file_to_stdin(infile) != -1)
+		{
+			close(pipefd[0]);
+			dup2(pipefd[1], STDOUT_FILENO);
+			close(pipefd[1]);
+			if (execve(cmd_args[0], cmd_args, env) == -1)
+				perror("execve");
+		}
 	}
 }
 
@@ -39,16 +42,19 @@ void	exec_cmd_last(char **cmd_args, int *pipefd, char *outfile, char **env)
 	pid = fork();
 	if (pid == -1)
 	{
-		perror_with_exit("fork", EXIT_FAILURE);
+		perror("fork");
+		return ;
 	}
 	if (pid == 0)
 	{
 		close(pipefd[1]);
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
-		redirect_stdout_to_file(outfile);
-		if (execve(cmd_args[0], cmd_args, env) == -1)
-			perror_with_exit("execve", EXIT_FAILURE);
+		if (redirect_stdout_to_file(outfile) != -1)
+		{
+			if (execve(cmd_args[0], cmd_args, env) == -1)
+				perror("execve");
+		}
 	}
 }
 
@@ -60,7 +66,8 @@ void	exec_cmd_middle(char **cmd_args, int *pipefd_in, int *pipefd_out,
 	pid = fork();
 	if (pid == -1)
 	{
-		perror_with_exit("fork", EXIT_FAILURE);
+		perror("fork");
+		return ;
 	}
 	if (pid == 0)
 	{
@@ -71,7 +78,7 @@ void	exec_cmd_middle(char **cmd_args, int *pipefd_in, int *pipefd_out,
 		dup2(pipefd_out[1], STDOUT_FILENO);
 		close(pipefd_out[1]);
 		if (execve(cmd_args[0], cmd_args, env) == -1)
-			perror_with_exit("execve", EXIT_FAILURE);
+			perror("execve");
 	}
 }
 
@@ -87,10 +94,12 @@ void	exec_cmd_single(char **cmd_args, char *infile, char *outfile,
 	}
 	if (pid == 0)
 	{
-		redirect_file_to_stdin(infile);
-		redirect_stdout_to_file(outfile);
+		if (redirect_file_to_stdin(infile) == -1)
+			return ;
+		if (redirect_stdout_to_file(outfile) == -1)
+			return ;
 		if (execve(cmd_args[0], cmd_args, env) == -1)
-			perror_with_exit("execve", EXIT_FAILURE);
+			perror("execve");
 	}
 }
 
