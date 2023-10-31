@@ -6,13 +6,13 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 18:39:27 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/27 22:18:40 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/31 21:13:31 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
 
-void	exec_cmd_first(char **cmd_args, int *pipefd, char *infile, char **env)
+int	exec_cmd_first(char **cmd_args, int *pipefd, char *infile, char **env)
 {
 	pid_t	pid;
 
@@ -20,7 +20,7 @@ void	exec_cmd_first(char **cmd_args, int *pipefd, char *infile, char **env)
 	if (pid == -1)
 	{
 		perror("fork");
-		return ;
+		return (pid);
 	}
 	if (pid == 0)
 	{
@@ -33,9 +33,10 @@ void	exec_cmd_first(char **cmd_args, int *pipefd, char *infile, char **env)
 				perror("execve");
 		}
 	}
+	return (pid);
 }
 
-void	exec_cmd_last(char **cmd_args, int *pipefd, char *outfile, char **env)
+int	exec_cmd_last(char **cmd_args, int *pipefd, char *outfile, char **env)
 {
 	pid_t	pid;
 
@@ -43,7 +44,7 @@ void	exec_cmd_last(char **cmd_args, int *pipefd, char *outfile, char **env)
 	if (pid == -1)
 	{
 		perror("fork");
-		return ;
+		return (pid);
 	}
 	if (pid == 0)
 	{
@@ -56,9 +57,10 @@ void	exec_cmd_last(char **cmd_args, int *pipefd, char *outfile, char **env)
 				perror("execve");
 		}
 	}
+	return (pid);
 }
 
-void	exec_cmd_middle(char **cmd_args, int *pipefd_in, int *pipefd_out,
+int	exec_cmd_middle(char **cmd_args, int *pipefd_in, int *pipefd_out,
 		char **env)
 {
 	pid_t	pid;
@@ -67,7 +69,7 @@ void	exec_cmd_middle(char **cmd_args, int *pipefd_in, int *pipefd_out,
 	if (pid == -1)
 	{
 		perror("fork");
-		return ;
+		return (pid);
 	}
 	if (pid == 0)
 	{
@@ -80,10 +82,10 @@ void	exec_cmd_middle(char **cmd_args, int *pipefd_in, int *pipefd_out,
 		if (execve(cmd_args[0], cmd_args, env) == -1)
 			perror("execve");
 	}
+	return (pid);
 }
 
-void	exec_cmd_single(char **cmd_args, char *infile, char *outfile,
-		char **env)
+int	exec_cmd_single(char **cmd_args, char *infile, char *outfile, char **env)
 {
 	pid_t	pid;
 
@@ -95,18 +97,19 @@ void	exec_cmd_single(char **cmd_args, char *infile, char *outfile,
 	if (pid == 0)
 	{
 		if (redirect_file_to_stdin(infile) == -1)
-			return ;
+			return (pid);
 		if (redirect_stdout_to_file(outfile) == -1)
-			return ;
+			return (pid);
 		if (execve(cmd_args[0], cmd_args, env) == -1)
 			perror("execve");
 	}
+	return (pid);
 }
 
 void	open_pipes(int (**pipefd_ptr)[2], int number)
 {
-	int	(*pipefd)[2];
 	int	i;
+	int	(*pipefd)[2];
 
 	pipefd = malloc(number * sizeof(*pipefd));
 	if (!pipefd)

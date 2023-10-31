@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 23:00:18 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/27 23:05:53 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/31 21:01:28 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ int			redirect_stdout_to_file(char *file);
 void		remove_here_doc_from_commands(t_command **commands);
 void		read_and_save_user_input(char *filename, char *limiter);
 void		remove_file(char *filename);
-void		exec_cmd_first(char **cmd_args, int *pipefd,
+int			exec_cmd_first(char **cmd_args, int *pipefd,
 				char *infile, char **env);
-void		exec_cmd_last(char **cmd_args, int *pipefd,
+int			exec_cmd_last(char **cmd_args, int *pipefd,
 				char *outfile, char **env);
-void		exec_cmd_middle(char **cmd_args, int *pipefd_in,
+int			exec_cmd_middle(char **cmd_args, int *pipefd_in,
 				int *pipefd_out, char **env);
-void		exec_cmd_single(char **cmd_args, char *infile,
+int			exec_cmd_single(char **cmd_args, char *infile,
 				char *outfile, char **env);
 void		open_pipes(int (**pipefd_ptr)[2], int number);
 #endif

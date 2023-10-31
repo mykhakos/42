@@ -6,13 +6,13 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 18:39:27 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/27 22:06:30 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:48:42 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	exec_cmd_first(char **cmd_args, int *pipefd, char *infile, char **env)
+int	exec_cmd_first(char **cmd_args, int *pipefd, char *infile, char **env)
 {
 	pid_t	pid;
 
@@ -20,7 +20,7 @@ void	exec_cmd_first(char **cmd_args, int *pipefd, char *infile, char **env)
 	if (pid == -1)
 	{
 		perror("fork");
-		return ;
+		return (-1);
 	}
 	if (pid == 0)
 	{
@@ -33,9 +33,10 @@ void	exec_cmd_first(char **cmd_args, int *pipefd, char *infile, char **env)
 				perror("execve");
 		}
 	}
+	return (pid);
 }
 
-void	exec_cmd_last(char **cmd_args, int *pipefd, char *outfile, char **env)
+int	exec_cmd_last(char **cmd_args, int *pipefd, char *outfile, char **env)
 {
 	pid_t	pid;
 
@@ -43,7 +44,7 @@ void	exec_cmd_last(char **cmd_args, int *pipefd, char *outfile, char **env)
 	if (pid == -1)
 	{
 		perror("fork");
-		return ;
+		return (-1);
 	}
 	if (pid == 0)
 	{
@@ -56,4 +57,5 @@ void	exec_cmd_last(char **cmd_args, int *pipefd, char *outfile, char **env)
 				perror("execve");
 		}
 	}
+	return (pid);
 }

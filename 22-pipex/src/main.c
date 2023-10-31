@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:53:25 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/27 17:05:02 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:43:50 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,23 @@ int	main(int argc, char **argv, char **env)
 {
 	t_command	*commands;
 	int			pipefd[2];
+	int			curr_pid;
 
 	check_arg_count(argc - 1);
-	commands = argv_to_commands_list(argc, argv, env);
 	if (pipe(pipefd) == -1)
 		perror_with_exit("pipe", EXIT_FAILURE);
-	exec_cmd_first(commands->command_args, pipefd, argv[1], env);
-	exec_cmd_last(commands->next->command_args, pipefd, argv[4], env);
-	close(pipefd[0]);
-	close(pipefd[1]);
-	wait(NULL);
-	wait(NULL);
+	commands = argv_to_commands_list(argc, argv, env);
+	curr_pid = exec_cmd_first(commands->command_args, pipefd, argv[1], env);
+	if (curr_pid != 0)
+		curr_pid = exec_cmd_last(commands->next->command_args, pipefd, argv[4],
+				env);
+	if (curr_pid != 0)
+	{
+		close(pipefd[0]);
+		close(pipefd[1]);
+		wait(NULL);
+		wait(NULL);
+	}
 	deallocate_commands(&commands);
 	return (0);
 }

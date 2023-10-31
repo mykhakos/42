@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:52:14 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/27 22:20:52 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/10/31 21:43:13 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,53 +39,77 @@ void	handle_here_doc(t_command **commands, int argc, char **argv)
 	}
 }
 
-void	exec_cmd_multi(t_command *commands, char *infile, char *outfile,
+int	exec_cmd_multi(t_command *commands, char *infile, char *outfile,
 		char **env)
 {
 	int	command_count;
+	int	curr_pid;
 	int	i;
 	int	(*pipefd)[2];
 
 	command_count = count_commands(commands);
 	open_pipes(&pipefd, command_count - 1);
-	exec_cmd_first(commands->command_args, pipefd[0], infile, env);
+	curr_pid = exec_cmd_first(commands->command_args, pipefd[0], infile, env);
+	if (curr_pid == 0)
+	{
+		free(pipefd);
+		return (curr_pid);
+	}
 	close(pipefd[0][1]);
 	commands = commands->next;
 	i = 1;
 	while (commands->next != NULL)
 	{
-		exec_cmd_middle(commands->command_args, pipefd[i - 1], pipefd[i], env);
+		curr_pid = exec_cmd_middle(commands->command_args, pipefd[i - 1],
+				pipefd[i], env);
+		if (curr_pid == 0)
+			break ;
 		close(pipefd[i - 1][0]);
 		close(pipefd[i][1]);
 		commands = commands->next;
 		i++;
 	}
-	exec_cmd_last(commands->command_args, pipefd[i - 1], outfile, env);
+	if (curr_pid != 0)
+		curr_pid = exec_cmd_last(commands->command_args, pipefd[i - 1],
+				outfile, env);
 	free(pipefd);
+	return (curr_pid);
+}
+
+static void	wait_for_child_processes(int p_count)
+{
+	int	i;
+
+	while (i < p_count)
+	{
+		wait(NULL);
+		i++;
+	}
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_command	*commands;
 	int			command_count;
-	int			i;
+	int			curr_pid;
 
 	check_arg_count(MIN_ARG_COUNT, argc - 1);
 	commands = argv_to_commands_list(argc, argv, env);
 	handle_here_doc(&commands, argc, argv);
+	curr_pid = -1;
 	command_count = count_commands(commands);
 	if (command_count == 1)
-		exec_cmd_single(commands->command_args, argv[1], argv[argc - 1], env);
+		curr_pid = exec_cmd_single(commands->command_args, argv[1],
+				argv[argc - 1], env);
 	else
-		exec_cmd_multi(commands, argv[1], argv[argc - 1], env);
-	i = 0;
-	while (i < command_count)
+		curr_pid = exec_cmd_multi(commands, argv[1], argv[argc - 1], env);
+	if (curr_pid != 0)
 	{
-		wait(NULL);
-		i++;
+		wait_for_child_processes(command_count);
+		if (!ft_strncmp(argv[1], HERE_DOC_TEMPFILE,
+				ft_strlen(HERE_DOC_TEMPFILE)))
+			remove_file(HERE_DOC_TEMPFILE);
 	}
 	deallocate_commands(&commands);
-	if (!ft_strncmp(argv[1], HERE_DOC_TEMPFILE, ft_strlen(HERE_DOC_TEMPFILE)))
-		remove_file(HERE_DOC_TEMPFILE);
 	return (0);
 }
