@@ -18,6 +18,17 @@ void	perror_with_exit(char *msg, int errcode)
 	exit(errcode);
 }
 
+void	check_arg_count(int expected_arg_count, int actual_arg_count)
+{
+	if (actual_arg_count < expected_arg_count)
+	{
+		dup2(STDOUT_FILENO, STDERR_FILENO);
+		ft_printf("Too few args (expected at least %i, got %i).\n",
+			expected_arg_count, actual_arg_count);
+		exit(EXIT_FAILURE);
+	}
+}
+
 t_command	*argv_to_commands_list(int argc, char **argv, char **env)
 {
 	t_command	*commands;

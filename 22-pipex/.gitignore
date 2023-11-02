@@ -1,9 +1,8 @@
 *.o
 *.a
-.vscode
-so_long
-
-
 *.txt
 *test*
-
+.vscode
+pipex
+bin/pipex
+bin/bonus/pipex

@@ -41,10 +41,18 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f $(BIN_DIR)/$(NAME)
+	rm -f $(BIN_BONUS_DIR)/$(NAME)
 	make -C $(LIBFT_DIR_PATH) fclean
 
 re: fclean all
 
 re_bonus: fclean bonus
 
-.PHONY: all clean fclean re bonus re_bonus
+move: $(BIN_DIR)/$(NAME)
+	cp $(BIN_DIR)/$(NAME) .
+
+move_bonus: $(BIN_BONUS_DIR)/$(NAME)
+	cp $(BIN_BONUS_DIR)/$(NAME) .
+
+.PHONY: all clean fclean re bonus re_bonus move move_bonus

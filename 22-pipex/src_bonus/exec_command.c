@@ -92,7 +92,8 @@ int	exec_cmd_single(char **cmd_args, char *infile, char *outfile, char **env)
 	pid = fork();
 	if (pid == -1)
 	{
-		perror_with_exit("fork", EXIT_FAILURE);
+		perror("fork");
+		return (pid);
 	}
 	if (pid == 0)
 	{

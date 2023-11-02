@@ -17,18 +17,8 @@
 #define HERE_DOC_TEMPFILE "tempfile"
 #define HERE_DOC_KW "here_doc"
 
-static void	check_arg_count(int expected_arg_count, int actual_arg_count)
-{
-	if (actual_arg_count < expected_arg_count)
-	{
-		dup2(STDOUT_FILENO, STDERR_FILENO);
-		ft_printf("Too few args (expected at least %i, got %i).\n",
-			expected_arg_count, actual_arg_count);
-		exit(EXIT_FAILURE);
-	}
-}
 
-void	handle_here_doc(t_command **commands, int argc, char **argv)
+static void	handle_here_doc(t_command **commands, int argc, char **argv)
 {
 	if (!ft_strncmp(argv[1], HERE_DOC_KW, ft_strlen(HERE_DOC_KW)))
 	{
@@ -39,39 +29,46 @@ void	handle_here_doc(t_command **commands, int argc, char **argv)
 	}
 }
 
-int	exec_cmd_multi(t_command *commands, char *infile, char *outfile,
+static int exec_cmd_middle_from_parent(t_command *commands, int (*pipefd)[2],
 		char **env)
 {
-	int	command_count;
 	int	curr_pid;
 	int	i;
-	int	(*pipefd)[2];
 
-	command_count = count_commands(commands);
-	open_pipes(&pipefd, command_count - 1);
-	curr_pid = exec_cmd_first(commands->command_args, pipefd[0], infile, env);
-	if (curr_pid == 0)
-	{
-		free(pipefd);
-		return (curr_pid);
-	}
-	close(pipefd[0][1]);
-	commands = commands->next;
 	i = 1;
 	while (commands->next != NULL)
 	{
 		curr_pid = exec_cmd_middle(commands->command_args, pipefd[i - 1],
 				pipefd[i], env);
 		if (curr_pid == 0)
-			break ;
+			return (curr_pid);
 		close(pipefd[i - 1][0]);
 		close(pipefd[i][1]);
 		commands = commands->next;
 		i++;
 	}
+	return (curr_pid);
+}
+
+static int	exec_cmd_multi(t_command *commands, char *infile, char *outfile,
+		char **env)
+{
+	int	(*pipefd)[2];
+	int	command_count;
+	int	curr_pid;
+
+	command_count = count_commands(commands);
+	open_pipes(&pipefd, command_count - 1);
+	curr_pid = exec_cmd_first(commands->command_args, pipefd[0], infile, env);
 	if (curr_pid != 0)
-		curr_pid = exec_cmd_last(commands->command_args, pipefd[i - 1],
-				outfile, env);
+	{
+		close(pipefd[0][1]);
+		commands = commands->next;
+		curr_pid = exec_cmd_middle_from_parent(commands, pipefd, env);
+		if (curr_pid != 0)
+			curr_pid = exec_cmd_last(commands->command_args,
+					pipefd[command_count - 2], outfile, env);
+	}
 	free(pipefd);
 	return (curr_pid);
 }
@@ -80,6 +77,7 @@ static void	wait_for_child_processes(int p_count)
 {
 	int	i;
 
+	i = 0;
 	while (i < p_count)
 	{
 		wait(NULL);

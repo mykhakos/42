@@ -27,6 +27,7 @@ typedef struct s_command
 }						t_command;
 
 void		perror_with_exit(char *msg, int errcode);
+void		check_arg_count(int expected_arg_count, int actual_arg_count);
 char		*get_exec_file_path(char *file, char **env_paths);
 t_command	*init_command(char **command_args);
 void		add_command(t_command **commands, char **command_args);
