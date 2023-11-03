@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:52:14 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/10/31 21:43:13 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/11/03 18:21:52 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #define MIN_ARG_COUNT_HERE_DOC 4
 #define HERE_DOC_TEMPFILE "tempfile"
 #define HERE_DOC_KW "here_doc"
-
 
 static void	handle_here_doc(t_command **commands, int argc, char **argv)
 {
@@ -29,7 +28,7 @@ static void	handle_here_doc(t_command **commands, int argc, char **argv)
 	}
 }
 
-static int exec_cmd_middle_from_parent(t_command *commands, int (*pipefd)[2],
+static int	exec_cmd_middle_from_parent(t_command *commands, int (*pipefd)[2],
 		char **env)
 {
 	int	curr_pid;
@@ -38,6 +37,7 @@ static int exec_cmd_middle_from_parent(t_command *commands, int (*pipefd)[2],
 	i = 1;
 	while (commands->next != NULL)
 	{
+		//ft_printf("exec: %s (i=%i)\n", commands->command_args[0], i);
 		curr_pid = exec_cmd_middle(commands->command_args, pipefd[i - 1],
 				pipefd[i], env);
 		if (curr_pid == 0)
@@ -64,12 +64,18 @@ static int	exec_cmd_multi(t_command *commands, char *infile, char *outfile,
 	{
 		close(pipefd[0][1]);
 		commands = commands->next;
-		curr_pid = exec_cmd_middle_from_parent(commands, pipefd, env);
+		if (commands->next != NULL)
+			curr_pid = exec_cmd_middle_from_parent(commands, pipefd, env);
 		if (curr_pid != 0)
+		{
+			while (commands->next != NULL)
+				commands = commands->next;
 			curr_pid = exec_cmd_last(commands->command_args,
 					pipefd[command_count - 2], outfile, env);
+		}
 	}
 	free(pipefd);
+	//ft_printf("ret pid: %i\n", curr_pid);
 	return (curr_pid);
 }
 
@@ -80,9 +86,12 @@ static void	wait_for_child_processes(int p_count)
 	i = 0;
 	while (i < p_count)
 	{
+		//ft_printf("awaiting %i / %i..\n", i + 1, p_count);
 		wait(NULL);
+		//ft_printf("awaited  %i / %i\n", i + 1, p_count);
 		i++;
 	}
+	//ft_printf("awaited all, returning..\n");
 }
 
 int	main(int argc, char **argv, char **env)
@@ -109,5 +118,6 @@ int	main(int argc, char **argv, char **env)
 			remove_file(HERE_DOC_TEMPFILE);
 	}
 	deallocate_commands(&commands);
+	//ft_printf("pid: %i ok\n", curr_pid);
 	return (0);
 }
