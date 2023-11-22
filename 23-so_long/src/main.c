@@ -11,10 +11,6 @@
 // }
 
 #define ESC 65307
-#define W 119
-#define A 97
-#define S 115
-#define D 100
 
 
 int	close_window(int keycode, t_mlx *vars)
@@ -110,8 +106,9 @@ int	main(void)
 		so_long.map->player_pos->col * TILE_SIZE,
 		so_long.map->player_pos->row * TILE_SIZE);
 	mlx_hook(so_long.mlx.win, 2, 1L<<0, move, &so_long);
-	mlx_string_put(so_long.mlx.mlx, so_long.mlx.win, 10, 20, 0xFFFFFF, "Moves:");
-	mlx_string_put(so_long.mlx.mlx, so_long.mlx.win, 50, 20, 0xFFFFFF, "0");
+	ft_printf("init pos: %i, %i\n", so_long.map->player_pos->row, so_long.map->player_pos->row);
+	mlx_string_put(so_long.mlx.mlx, so_long.mlx.win, TILE_SIZE / 2, TILE_SIZE / 2, 0xFFFFFF, "Moves:");
+	mlx_string_put(so_long.mlx.mlx, so_long.mlx.win, TILE_SIZE * 2, TILE_SIZE / 2, 0xFFFFFF, ft_itoa(so_long.moves));
 	mlx_loop(so_long.mlx.mlx);
 }
 

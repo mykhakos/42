@@ -1,36 +1,14 @@
 #include "../../include/so_long.h"
 
 
-static void render_tile(char tile, int tile_row, int tile_col, t_so_long *so_long)
+static void render_tile(void *img_ptr, int row, int col, t_so_long *so_long)
 {
-	if (tile == '1')
-		mlx_put_image_to_window(
-			(*so_long).mlx.mlx,
-			(*so_long).mlx.win,
-			(*so_long).textures.wall.img_ptr,
-			tile_col * TILE_SIZE,
-			tile_row * TILE_SIZE);
-	if (tile == '0')
-		mlx_put_image_to_window(
-			(*so_long).mlx.mlx,
-			(*so_long).mlx.win,
-			(*so_long).textures.floor.img_ptr,
-			tile_col * TILE_SIZE,
-			tile_row * TILE_SIZE);
-	else if (tile == 'C')
-		mlx_put_image_to_window(
-			(*so_long).mlx.mlx,
-			(*so_long).mlx.win,
-			(*so_long).textures.collectible.img_ptr,
-			tile_col * TILE_SIZE,
-			tile_row * TILE_SIZE);
-	else if (tile == 'E')
-		mlx_put_image_to_window(
-			(*so_long).mlx.mlx,
-			(*so_long).mlx.win,
-			(*so_long).textures.exit.img_ptr,
-			tile_col * TILE_SIZE,
-			tile_row * TILE_SIZE);
+	mlx_put_image_to_window(
+		(*so_long).mlx.mlx,
+		(*so_long).mlx.win,
+		img_ptr,
+		col * TILE_SIZE,
+		row * TILE_SIZE);
 }
 
 void render_map(t_so_long *so_long)
@@ -46,7 +24,16 @@ void render_map(t_so_long *so_long)
 		while (j < so_long->map->col_count)
 		{
 			tile = so_long->map->layout[i][j];
-			render_tile(tile, i, j, so_long);
+			if (tile == '1')
+				render_tile((*so_long).textures.wall.img_ptr, i, j, so_long);
+			else if (tile == '0')
+				render_tile((*so_long).textures.floor.img_ptr, i, j, so_long);
+			else if (tile == 'C')
+				render_tile((*so_long).textures.collectible.img_ptr, i, j, so_long);
+			else if (tile == 'E')
+				render_tile((*so_long).textures.exit.img_ptr, i, j, so_long);
+			else if (tile == 'P')
+				render_tile((*so_long).textures.player.img_ptr, i, j, so_long);
 			j++;
 		}
 		i++;
@@ -60,20 +47,18 @@ int move(int keycode, t_so_long *so_long)
 
 	old_pos_row = so_long->map->player_pos->row;
 	old_pos_col = so_long->map->player_pos->col;
-	if (keycode == XK_w && so_long->map->player_pos->row > 0)
+	if (keycode == XK_w && so_long->map->player_pos->row > 1)
 		so_long->map->player_pos->row -= 1;
-	else if (keycode == XK_a && so_long->map->player_pos->col > 0)
+	else if (keycode == XK_a && so_long->map->player_pos->col > 1)
 		so_long->map->player_pos->col -= 1;
-	else if (keycode == XK_s)
+	else if (keycode == XK_s && so_long->map->player_pos->row < so_long->map->row_count - 2)
 		so_long->map->player_pos->row += 1;
-	else if (keycode == XK_d)
+	else if (keycode == XK_d && so_long->map->player_pos->col < so_long->map->col_count - 2)
 		so_long->map->player_pos->col += 1;
 	if (old_pos_row != so_long->map->player_pos->row ||
 		old_pos_col != so_long->map->player_pos->col)
 		{
 		    (*so_long).moves += 1;
-            render_map(so_long);
-            /*
             mlx_put_image_to_window(
                 (*so_long).mlx.mlx,
                 (*so_long).mlx.win,
@@ -83,18 +68,17 @@ int move(int keycode, t_so_long *so_long)
             mlx_put_image_to_window(
                 (*so_long).mlx.mlx,
                 (*so_long).mlx.win,
-                (*so_long).textures.floor.img_ptr,
-                40,
-                10);
+                (*so_long).textures.wall.img_ptr,
+                TILE_SIZE * 2,
+                TILE_SIZE * 0);
             mlx_put_image_to_window(
                 (*so_long).mlx.mlx,
                 (*so_long).mlx.win,
                 (*so_long).textures.player.img_ptr,
                 (*so_long).map->player_pos->col * TILE_SIZE,
                 (*so_long).map->player_pos->row * TILE_SIZE);
-            */
-            mlx_string_put((*so_long).mlx.mlx, (*so_long).mlx.win, 10, 20, 0xFFFFFF, "Moves:");
-            mlx_string_put((*so_long).mlx.mlx, (*so_long).mlx.win, 50, 20, 0xFFFFFF, ft_itoa((*so_long).moves));
+            mlx_string_put((*so_long).mlx.mlx, (*so_long).mlx.win, TILE_SIZE / 2, TILE_SIZE / 2, 0xFFFFFF, "Moves:");
+            mlx_string_put((*so_long).mlx.mlx, (*so_long).mlx.win, TILE_SIZE * 2, TILE_SIZE / 2, 0xFFFFFF, ft_itoa((*so_long).moves));
         }
 	return (0);
 }
