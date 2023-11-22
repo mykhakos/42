@@ -1,8 +1,8 @@
-# include <stdlib.h>
-# include <stdio.h>
+# include "../../include/so_long.h"
+
 
 void perror_with_exit(int exit_code, char *err_msg)
 {
-    perror(err_msg);
-    exit(exit_code);       
+    ft_printf("%s (%i)\n", err_msg, exit_code);
+    //exit(exit_code);       
 }

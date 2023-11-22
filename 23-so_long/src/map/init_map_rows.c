@@ -1,26 +1,26 @@
-#include "../map.h"
+#include "../../include/so_long.h"
 
-t_mapRow *init_row(char *row_chars)
+t_map_row *init_row(char *row_chars)
 {
-    t_mapRow *row;
+    t_map_row *row;
 
-    row = malloc(sizeof(t_mapRow));
+    row = malloc(sizeof(t_map_row));
     if (!row)
         return (NULL);
     row->row = row_chars;
     return (row);
 }
 
-void append_row(t_mapRow **map, char *new_row_chars)
+void append_row(t_map_row **rows, char *new_row_chars)
 {
-    t_mapRow *new_row;
-    t_mapRow *last_row;
+    t_map_row *new_row;
+    t_map_row *last_row;
 
     new_row = init_row(new_row_chars);
-    last_row = *map;
+    last_row = *rows;
     if (last_row == NULL)
     {
-        *map = new_row;
+        *rows = new_row;
     }
     else
     {
@@ -33,7 +33,7 @@ void append_row(t_mapRow **map, char *new_row_chars)
 }
 
 
-void deallocate_rows(t_mapRow **rows)
+void deallocate_rows(t_map_row **rows)
 {
     while ((*rows) != NULL)
     {
