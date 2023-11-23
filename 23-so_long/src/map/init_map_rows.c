@@ -1,5 +1,6 @@
 #include "../../include/so_long.h"
 
+
 t_map_row *init_row(char *row_chars)
 {
     t_map_row *row;
@@ -8,6 +9,7 @@ t_map_row *init_row(char *row_chars)
     if (!row)
         return (NULL);
     row->row = row_chars;
+    row->next = NULL;
     return (row);
 }
 
@@ -25,19 +27,23 @@ void append_row(t_map_row **rows, char *new_row_chars)
     else
     {
         while (last_row->next != NULL)
-        {
             last_row = last_row->next;
-        }
         last_row->next = new_row;
     }
 }
 
-
 void deallocate_rows(t_map_row **rows)
 {
-    while ((*rows) != NULL)
+    t_map_row *current;
+    t_map_row *next;
+
+    current = *rows;
+    while (current != NULL)
     {
-        free(*rows);
+        next = current->next;
+        free(current->row);
+        free(current);
+        current = next;
     }
-    free(rows);
+    *rows = NULL;
 }

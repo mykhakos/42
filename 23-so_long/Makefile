@@ -15,7 +15,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(LIBFT_LIB_FILE) $(MLX_LIB_FILE)
+$(NAME): $(OBJ) $(LIBFT_LIB_FILE) 
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -L/usr/lib/X11 -lXext -lX11
 
 %.o: %.c
