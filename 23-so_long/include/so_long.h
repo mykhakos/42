@@ -66,7 +66,10 @@ typedef struct	s_textures
 {
 	t_texture	wall;
 	t_texture	floor;
-	t_texture	player;
+	t_texture	player_up;
+	t_texture	player_down;
+	t_texture	player_left;
+	t_texture	player_right;
     t_texture	collectible;
     t_texture	exit_closed;
     t_texture	exit_open;

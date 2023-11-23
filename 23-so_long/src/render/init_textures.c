@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 20:22:00 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/11/23 20:22:27 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/11/23 22:23:16 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,26 @@
 
 static void	init_texture_player(t_so_long *so_long)
 {
-	(*so_long).textures.player.img_ptr = mlx_xpm_file_to_image(
+	(*so_long).textures.player_up.img_ptr = mlx_xpm_file_to_image(
 			(*so_long).mlx.mlx,
 			"./textures/player.xpm",
-			&(*so_long).textures.player.img_width,
-			&(*so_long).textures.player.img_height);
+			&(*so_long).textures.player_up.img_width,
+			&(*so_long).textures.player_up.img_height);
+	(*so_long).textures.player_down.img_ptr = mlx_xpm_file_to_image(
+			(*so_long).mlx.mlx,
+			"./textures/player_down.xpm",
+			&(*so_long).textures.player_down.img_width,
+			&(*so_long).textures.player_down.img_height);
+	(*so_long).textures.player_left.img_ptr = mlx_xpm_file_to_image(
+			(*so_long).mlx.mlx,
+			"./textures/player.xpm",
+			&(*so_long).textures.player_left.img_width,
+			&(*so_long).textures.player_left.img_height);
+	(*so_long).textures.player_right.img_ptr = mlx_xpm_file_to_image(
+			(*so_long).mlx.mlx,
+			"./textures/player.xpm",
+			&(*so_long).textures.player_right.img_width,
+			&(*so_long).textures.player_right.img_height);
 }
 
 static void	init_texture_exit(t_so_long *so_long)

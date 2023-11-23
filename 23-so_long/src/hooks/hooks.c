@@ -7,15 +7,28 @@ static t_map_pos	calc_new_pos(int keycode, t_so_long *so_long)
 	new_pos.row = so_long->map->player_pos->row;
 	new_pos.col = so_long->map->player_pos->col;
 	if (keycode == XK_w)
+	{
 		new_pos.row -= 1;
+		so_long->map->player_dir = N;
+	}
 	else if (keycode == XK_a)
+	{
 		new_pos.col -= 1;
+		so_long->map->player_dir = W;
+	}
 	else if (keycode == XK_s)
+	{
 		new_pos.row += 1;
+		so_long->map->player_dir = S;
+	}
 	else if (keycode == XK_d)
+	{
 		new_pos.col += 1;
+		so_long->map->player_dir = E;
+	}
 	return (new_pos);
 }
+
 
 static int	handle_player_move(int keycode, t_so_long *so_long)
 {
@@ -31,12 +44,18 @@ static int	handle_player_move(int keycode, t_so_long *so_long)
 	{
 		new_tile = so_long->map->layout[new_pos.row][new_pos.col];
 		if (new_tile == '1')
+		{
+			render_player_move(curr_pos, so_long);
 			return (0);
+		}
 		if (new_tile == 'E')
 		{
 			collectibles_found = (*so_long).collectibles_found;
 			if (collectibles_found < so_long->map->collectibles_count)
+			{
+				render_player_move(curr_pos, so_long);
 				return (0);
+			}
 			exit_game(so_long);
 		}
 		if (new_tile == 'C')
@@ -47,6 +66,8 @@ static int	handle_player_move(int keycode, t_so_long *so_long)
 				render_tile(so_long->textures.exit_open.img_ptr,
 					so_long->map->exit->row, so_long->map->exit->col, so_long);
 		}
+		(so_long)->moves += 1;
+		ft_printf("Moves: %i\n", (*so_long).moves);
 		render_player_move(new_pos, so_long);
 	}
 	return (0);

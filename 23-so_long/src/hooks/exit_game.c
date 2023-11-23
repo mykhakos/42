@@ -31,7 +31,10 @@ int exit_game(t_so_long *so_long)
     safe_destroy_image(so_long->textures.exit_closed, so_long->mlx.mlx);
     safe_destroy_image(so_long->textures.exit_open, so_long->mlx.mlx);
     safe_destroy_image(so_long->textures.floor, so_long->mlx.mlx);
-    safe_destroy_image(so_long->textures.player, so_long->mlx.mlx);
+    safe_destroy_image(so_long->textures.player_up, so_long->mlx.mlx);
+    safe_destroy_image(so_long->textures.player_down, so_long->mlx.mlx);
+    safe_destroy_image(so_long->textures.player_left, so_long->mlx.mlx);
+    safe_destroy_image(so_long->textures.player_right, so_long->mlx.mlx);
     safe_destroy_image(so_long->textures.wall, so_long->mlx.mlx);
     free_map(&(so_long->map));
 	mlx_destroy_window(so_long->mlx.mlx, so_long->mlx.win);
