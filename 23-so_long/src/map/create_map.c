@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 18:27:28 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/11/24 20:52:01 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/11/24 21:31:06 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,16 @@ static char	**create_map_layout(t_map_row *rows, int row_count)
 	while (row < row_count)
 	{
 		layout[row] = ft_strdup(rows->row);
+		if (!layout[row])
+		{
+			while (row)
+			{
+				row--;
+				free(layout[row]);
+			}
+			free(layout);
+			return (NULL);
+		}
 		row++;
 		rows = rows->next;
 	}

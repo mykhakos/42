@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 18:13:56 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/11/24 18:37:36 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/11/24 21:24:38 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ static int	update_player_pos(t_map_pos curr_pos, t_map_pos new_pos,
 	}
 	if (so_long->map->layout[new_pos.row][new_pos.col] == 'C')
 	{
+		so_long->map->layout[new_pos.row][new_pos.col] = '0';
 		(*so_long).collectibles_found += 1;
 		collectibles_found = (*so_long).collectibles_found;
 		if (collectibles_found >= so_long->map->collectibles_count)
