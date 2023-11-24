@@ -6,88 +6,108 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 17:03:49 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/11/23 18:20:33 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/11/24 20:47:29 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/so_long.h"
 
-static int	check_first_and_last_row_chars(char *row_chars)
+static t_map_errcode	check_first_last_row_chars(char *row_chars,
+		int *row_len)
 {
-	int	row_len;
+	int	len;
 
-	row_len = 0;
-	while (row_chars[row_len] != '\0')
+	len = 0;
+	while (row_chars[len] != '\0')
 	{
-		if (row_chars[row_len] != '1')
-			perror_with_exit(1, "Map border is not continuous.");
-		row_len++;
+		if (row_chars[len] != '1')
+			return (BORDER_NOT_CONTINUOUS);
+		len++;
 	}
-	if (row_len < 3)
-		perror_with_exit(1, "Map is too narrow.");
-	return (row_len);
+	if (len < 3)
+		return (TOO_NARROW);
+	*row_len = len;
+	return (NONE);
 }
 
-static void	ensure_pos_is_unique(int row, int col, t_map_pos *pos)
+static t_map_errcode	check_char(char c, int row, int col, t_map *map)
 {
-	if (pos->row != 0 || pos->col != 0)
-		perror_with_exit(1, "Map contains multiple unique characters.");
-	pos->row = row;
-	pos->col = col;
-}
+	t_map_errcode	errcode;
 
-static void	chech_row_char(char c, int row, int col, t_map *map)
-{
 	if (c == 'C')
 		map->collectibles_count += 1;
 	else if (c == 'P')
-		ensure_pos_is_unique(row, col, map->player_pos);
+	{
+		errcode = update_pos_if_zero(row, col, map->player_pos);
+		if (errcode)
+			return (errcode);
+	}
 	else if (c == 'E')
-		ensure_pos_is_unique(row, col, map->exit);
+	{
+		errcode = update_pos_if_zero(row, col, map->exit);
+		if (errcode)
+			return (errcode);
+	}
 	else if (c != '0' && c != '1')
-		perror_with_exit(1, "Map characters are invalid.");
+		return (CHAR_INVALID);
+	return (NONE);
 }
 
-static void	check_row_chars(char *row_chars, int row, t_map *map)
+static t_map_errcode	check_middle_row_chars(char *row_chars, int row,
+		t_map *map)
 {
-	int	col;
+	int				col;
+	t_map_errcode	errcode;
 
 	col = 0;
 	while (row_chars[col] != '\0')
 	{
-		chech_row_char(row_chars[col], row, col, map);
+		errcode = check_char(row_chars[col], row, col, map);
+		if (errcode)
+			return (errcode);
 		col++;
 	}
 	if (col != map->col_count)
-		perror_with_exit(1, "Map width is not consistent.");
+		return (WIDTH_INCONSISTENT);
 	if (row_chars[0] != '1' || row_chars[col - 1] != '1')
-		perror_with_exit(1, "Map border is not continuous.");
+		return (BORDER_NOT_CONTINUOUS);
+	return (NONE);
 }
 
-t_map	*check_map_chars(t_map_row *map_rows)
+static t_map_errcode	check_map_important_chars(t_map *map)
 {
-	t_map	*map;
+	if (map->player_pos->row == 0 || map->player_pos->col == 0)
+		return (INVALID_CHAR_COUNT_PLAYER);
+	if (map->exit->row == 0 || map->exit->col == 0)
+		return (INVALID_CHAR_COUNT_EXIT);
+	if (map->collectibles_count == 0)
+		return (INVALID_CHAR_COUNT_COLLECTIBLE);
+	return (NONE);
+}
 
-	if (!map_rows)
-		perror_with_exit(1, "t_map_rowsRow pointer points to NULL.");
-	map = init_map();
-	map->col_count = check_first_and_last_row_chars(map_rows->row);
-	map->row_count += 1;
+t_map_errcode	check_map_chars(t_map *map, t_map_row *map_rows)
+{
+	t_map_errcode	errcode;
+	int				row;
+
+	errcode = check_first_last_row_chars(map_rows->row, &(map->col_count));
+	if (errcode)
+		return (errcode);
 	map_rows = map_rows->next;
+	row = 1;
 	while (map_rows->next != NULL)
 	{
-		check_row_chars(map_rows->row, map->row_count, map);
+		errcode = check_middle_row_chars(map_rows->row, row, map);
+		if (errcode)
+			return (errcode);
+		row++;
 		map_rows = map_rows->next;
-		map->row_count += 1;
 	}
-	if (check_first_and_last_row_chars(map_rows->row) != map->col_count)
-		perror_with_exit(1, "Map width is not consistent.");
-	map->row_count += 1;
-	if (map->player_pos->row == 0 || map->player_pos->col == 0)
-		perror_with_exit(1, "Map requires one player position character.");
-	if (map->exit->row == 0 || map->exit->col == 0)
-		perror_with_exit(1, "Map requires one exit character.");
-	if (map->collectibles_count == 0)
-		perror_with_exit(1, "Map requires at least one collectible.");
-	return (map);
+	errcode = check_first_last_row_chars(map_rows->row, &(map->col_count));
+	if (errcode)
+		return (errcode);
+	errcode = check_map_important_chars(map);
+	if (errcode)
+		return (errcode);
+	return (NONE);
 }
