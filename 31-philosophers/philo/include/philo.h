@@ -79,8 +79,7 @@ typedef struct s_philo
 } t_philo;
 
 t_philo *philo_init(void);
-int philo_init_and_set_phils(t_philo *philo, int count);
-int philo_init_and_set_forks(t_philo *philo, int count);
+int philo_init_and_set_phils_and_forks(t_philo *philo, int count);
 void philo_free(t_philo **philo);
 
 t_fork	*forks_init(int count);
@@ -91,7 +90,7 @@ void	phils_set_forks(t_phil *phils, t_fork *forks, int count);
 void	phils_set_neighbors(t_phil *phils, int count);
 void	phils_set_philo(t_phil *phils, t_philo *philo, int count);
 void	phils_free(t_phil **phils, int count);
-int allowed_to_eat(t_phil *phil);
+int phil_is_allowed_to_eat(t_phil *phil);
 int get_is_any_dead(t_philo *philo);
 void set_is_any_dead(t_philo *philo, int value);
 
@@ -104,5 +103,6 @@ void *phil_routine(void *arg_phil);
 
 int	ft_atoi(const char *str);
 long get_current_time_ms(t_philo **philo);
+int mutex_safeinit(pthread_mutex_t *mutex, void **free_on_error);
 
 #endif

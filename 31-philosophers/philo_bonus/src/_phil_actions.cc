@@ -84,7 +84,7 @@ void *phil_routine(void *arg_phil)
             || phil->philo->number_of_meals < 0)
     {
 
-        if (allowed_to_eat(phil))
+        if (phil_is_allowed_to_eat(phil))
         {
             if (!phil_eat(phil, get_current_time_ms(&(phil->philo))))
                 break ;

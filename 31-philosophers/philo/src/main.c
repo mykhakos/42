@@ -72,17 +72,11 @@ int main(int argc, char **argv)
         philo_free(&philo);
         return (1);
     }
-    if (philo_init_and_set_phils(philo, philo->number_of_phils) != 0)
+    if (philo_init_and_set_phils_and_forks(philo, philo->number_of_phils) != 0)
     {
         philo_free(&philo);
         return (1);
     }
-    if (philo_init_and_set_forks(philo, philo->number_of_phils) != 0)
-    {
-        philo_free(&philo);
-        return (1);
-    }
-    phils_set_forks(philo->phils, philo->forks, philo->number_of_phils);
     timestamp_simstart = get_current_time_ms(&philo);
     philo->timestamp_simstart = timestamp_simstart;
     i = 0;

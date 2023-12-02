@@ -62,8 +62,11 @@ int phil_die(t_phil *phil)
     timestamp_last_meal_time = phil_get_last_meal_time(phil);
     if (timestamp_now - timestamp_last_meal_time < phil->philo->time_to_die)
         return (0);
+    if (get_is_any_dead(phil->philo))
+        return (1);
     set_is_any_dead(phil->philo, 1);
     phil_set_state(phil, DEAD);
+    usleep(500);
     phil_log(phil, "died", COLOR_RED);
     return (1);
 }
@@ -76,8 +79,7 @@ void *phil_routine(void *arg_phil)
     while (phil->meals_eaten < phil->philo->number_of_meals
             || phil->philo->number_of_meals < 0)
     {
-
-        if (allowed_to_eat(phil))
+        if (phil_is_allowed_to_eat(phil))
         {
             if (!phil_eat(phil))
                 break ;
@@ -90,7 +92,7 @@ void *phil_routine(void *arg_phil)
             break ;
         if (get_is_any_dead(phil->philo))
             break ;
-        usleep(1000);
+        usleep(2000);
     }
     return (NULL);
 }

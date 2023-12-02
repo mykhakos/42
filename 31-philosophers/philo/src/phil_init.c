@@ -12,16 +12,6 @@
 
 #include "../include/philo.h"
 
-static int phil_init_mutex(t_phil **phils, pthread_mutex_t *mutex)
-{
-    if (pthread_mutex_init(mutex, NULL) != 0)
-    {
-        free(*phils);
-        *phils = NULL;
-        return (1);
-    }
-    return (0);
-}
 
 t_phil	*phils_init(int count)
 {
@@ -34,9 +24,9 @@ t_phil	*phils_init(int count)
 	i = 0;
 	while (i < count)
 	{
-		if (phil_init_mutex(&phils, &(phils[i].mutex_state)) != 0)
+		if (mutex_safeinit(&(phils[i].mutex_state), (void **)&phils) != 0)
 			return (NULL);
-		if (phil_init_mutex(&phils, &(phils[i].mutex_last_meal_time)) != 0)
+		if (mutex_safeinit(&(phils[i].mutex_last_meal_time), (void **)&phils))
 			return (NULL);
 		phils[i].id = i + 1;
 		phils[i].last_meal_time = 0;

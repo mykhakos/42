@@ -90,7 +90,7 @@ void	phils_set_philo(t_phil *phils, t_philo *philo, int count);
 void	phils_free(t_phil **phils, int count);
 t_phil *phil_left(t_phil *phil);
 t_phil *phil_right(t_phil *phil);
-int allowed_to_eat(t_phil *phil);
+int phil_is_allowed_to_eat(t_phil *phil);
 int is_any_dead(t_philo *philo);
 void phil_log(long timestamp, t_phil *phil, const char *state, const char *color_code);
 void *phil_routine(void *arg_phil);

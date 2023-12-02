@@ -1,6 +1,6 @@
 #include "../include/philo.h"
 
-int allowed_to_eat(t_phil *phil)
+int phil_is_allowed_to_eat(t_phil *phil)
 {
     int allowed_to_eat;
     long last_meal_time;
