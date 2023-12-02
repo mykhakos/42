@@ -14,30 +14,30 @@ void phil_eat(t_phil *phil)
 {
     phil->state = EATING;
 
-    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "waiting for the waiter permit", NULL);
+    phil_log(get_current_time_ms(&(phil->philo)), phil, "waiting for the waiter permit", NULL);
     sem_wait(phil->philo->sem_waiter);
-    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "has got the waiter permit", NULL);
+    phil_log(get_current_time_ms(&(phil->philo)), phil, "has got the waiter permit", NULL);
     sem_wait(phil->philo->sem_forks);
-    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "has taken a fork", NULL);
+    phil_log(get_current_time_ms(&(phil->philo)), phil, "has taken a fork", NULL);
     sem_wait(phil->philo->sem_forks);
-    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "has taken a fork", NULL);
+    phil_log(get_current_time_ms(&(phil->philo)), phil, "has taken a fork", NULL);
     phil_set_last_meal_time(phil, get_current_time_ms(&(phil->philo)));
-    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "is eating", COLOR_GREEN);
+    phil_log(get_current_time_ms(&(phil->philo)), phil, "is eating", COLOR_GREEN);
     usleep(phil->philo->time_to_eat * 1000);
     phil->meals_eaten += 1;
     sem_post(phil->philo->sem_forks);
-    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "has released a fork", NULL);
+    phil_log(get_current_time_ms(&(phil->philo)), phil, "has released a fork", NULL);
     sem_post(phil->philo->sem_forks);
-    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "has released a fork", NULL);
+    phil_log(get_current_time_ms(&(phil->philo)), phil, "has released a fork", NULL);
     sem_post(phil->philo->sem_waiter);
-    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "has posted to the waiter semaphore", NULL);
+    phil_log(get_current_time_ms(&(phil->philo)), phil, "has posted to the waiter semaphore", NULL);
 
 }
 
 void phil_sleep(t_phil *phil)
 {
     phil->state = SLEEPING;
-    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "is sleeping", COLOR_BLUE);
+    phil_log(get_current_time_ms(&(phil->philo)), phil, "is sleeping", COLOR_BLUE);
     usleep(phil->philo->time_to_sleep * 1000);
 }
 
@@ -46,7 +46,7 @@ void phil_think(t_phil *phil)
     if (phil->state == THINKING)
         return ;
     phil->state = THINKING;
-    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "is thinking", COLOR_YELLOW);
+    phil_log(get_current_time_ms(&(phil->philo)), phil, "is thinking", COLOR_YELLOW);
 }
 
 void *death_checker(void *args)
@@ -63,7 +63,7 @@ void *death_checker(void *args)
         now = get_current_time_ms(&(phil->philo));
         if (now - last_meal_time >= phil->philo->time_to_die)
         {
-            phil_print_state(now, phil, "is dying...", COLOR_RED);
+            phil_log(now, phil, "is dying...", COLOR_RED);
             phil->state = DEAD;
             sem_post(phil->philo->sem_simterm);
             // i = 0;
@@ -72,7 +72,7 @@ void *death_checker(void *args)
             //     sem_post(phil->philo->sem_simterm);
             //     i++;
             // }
-            phil_print_state(now, phil, "died", COLOR_RED);
+            phil_log(now, phil, "died", COLOR_RED);
             break ;
         }
         usleep(2000);

@@ -10,13 +10,13 @@ int phil_eat(t_phil *phil, long timestamp)
     {
         phil->state = EATING;
         phil->last_meal_time = timestamp;
-        phil_print_state(timestamp, phil, "has taken a fork", NULL);
+        phil_log(timestamp, phil, "has taken a fork", NULL);
         if (!is_any_dead(phil->philo))
         {
-            phil_print_state(timestamp, phil, "has taken a fork", NULL);
+            phil_log(timestamp, phil, "has taken a fork", NULL);
             if (!is_any_dead(phil->philo))
             {
-                phil_print_state(timestamp, phil, "is eating", COLOR_GREEN);
+                phil_log(timestamp, phil, "is eating", COLOR_GREEN);
                 usleep(phil->philo->time_to_eat * 1000);
                 phil->meals_eaten += 1;
                 eaten = 1;
@@ -38,7 +38,7 @@ int phil_sleep(t_phil *phil, long timestamp)
         return (slept);
     slept = 1;
     phil->state = SLEEPING;
-    phil_print_state(timestamp, phil, "is sleeping", COLOR_BLUE);
+    phil_log(timestamp, phil, "is sleeping", COLOR_BLUE);
     usleep(phil->philo->time_to_sleep * 1000);
     return (slept);
 }
@@ -54,7 +54,7 @@ int phil_think(t_phil *phil, long timestamp)
     if (phil->state == THINKING)
         return (thought);
     phil->state = THINKING;
-    phil_print_state(timestamp, phil, "is thinking", COLOR_YELLOW);
+    phil_log(timestamp, phil, "is thinking", COLOR_YELLOW);
     return (thought);
 }
 
@@ -71,7 +71,7 @@ int phil_die(t_phil *phil, long timestamp)
     pthread_mutex_lock(&(phil->philo->mutex_death));
     phil->philo->is_any_dead = 1;
     pthread_mutex_unlock(&(phil->philo->mutex_death));
-    phil_print_state(timestamp, phil, "died", COLOR_RED);
+    phil_log(timestamp, phil, "died", COLOR_RED);
     return (died);
 }
 

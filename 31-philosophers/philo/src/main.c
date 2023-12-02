@@ -82,7 +82,7 @@ int main(int argc, char **argv)
         return (1);
     }
     phils_set_forks(philo->phils, philo->forks, philo->number_of_phils);
-    philo->simtime_start = get_current_time_ms(&philo);
+    philo->timestamp_simstart = get_current_time_ms(&philo);
     i = 0;
     while (i < philo->number_of_phils)
     {

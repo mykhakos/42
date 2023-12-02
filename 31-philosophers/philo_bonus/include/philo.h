@@ -72,7 +72,7 @@ typedef struct s_philo
     long time_to_die;
     long time_to_eat;
     long time_to_sleep;
-    long simtime_start;
+    long timestamp_simstart;
     t_phil *phils;
     sem_t *sem_forks;
     sem_t *sem_log;
@@ -92,7 +92,7 @@ t_phil *phil_left(t_phil *phil);
 t_phil *phil_right(t_phil *phil);
 int allowed_to_eat(t_phil *phil);
 int is_any_dead(t_philo *philo);
-void phil_print_state(long timestamp, t_phil *phil, const char *state, const char *color_code);
+void phil_log(long timestamp, t_phil *phil, const char *state, const char *color_code);
 void *phil_routine(void *arg_phil);
 
 int	ft_atoi(const char *str);

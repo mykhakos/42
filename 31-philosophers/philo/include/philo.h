@@ -68,7 +68,7 @@ typedef struct s_philo
     long time_to_die;
     long time_to_eat;
     long time_to_sleep;
-    long simtime_start;
+    long timestamp_simstart;
     t_phil *phils;
     t_fork *forks;
     pthread_mutex_t mutex_log;
@@ -89,11 +89,11 @@ void	phils_set_forks(t_phil *phils, t_fork *forks, int count);
 void	phils_set_neighbors(t_phil *phils, int count);
 void	phils_set_philo(t_phil *phils, t_philo *philo, int count);
 void	phils_free(t_phil **phils, int count);
-// t_phil *phil_left(t_phil *phil);
-// t_phil *phil_right(t_phil *phil);
 int allowed_to_eat(t_phil *phil);
-int is_any_dead(t_philo *philo);
-void phil_print_state(long timestamp, t_phil *phil, const char *state, const char *color_code);
+int get_is_any_dead(t_philo *philo);
+void set_is_any_dead(t_philo *philo, int value);
+
+void phil_log(t_phil *phil, char *msg, const char *color_code);
 void *phil_routine(void *arg_phil);
 
 int	ft_atoi(const char *str);

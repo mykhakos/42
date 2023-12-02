@@ -22,7 +22,7 @@ int main(void)
     philo->time_to_sleep = t_sleep;
     philo_init_and_set_phils(philo, philo->number_of_phils);
     philo_init_and_set_semaphores(philo, philo->number_of_phils);
-    philo->simtime_start = get_current_time_ms(NULL);
+    philo->timestamp_simstart = get_current_time_ms(NULL);
     i = 0;
     while (i < philo->number_of_phils)
     {

@@ -1,6 +1,6 @@
 #include "../include/philo.h"
 
-void phil_print_state(
+void phil_log(
         long timestamp,
         t_phil *phil,
         const char *state,
@@ -10,7 +10,7 @@ void phil_print_state(
         color_code = COLOR_DEFAULT;
     sem_wait(phil->philo->sem_log);
     printf("%s%04ld\t%i\t%s%s\n",
-            color_code, timestamp - phil->philo->simtime_start, phil->id, state, COLOR_DEFAULT);
+            color_code, timestamp - phil->philo->timestamp_simstart, phil->id, state, COLOR_DEFAULT);
     sem_post(phil->philo->sem_log);
 }
 

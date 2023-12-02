@@ -4,7 +4,7 @@ int allowed_to_eat(t_phil *phil)
 {
     int allowed_to_eat;
 
-    if (is_any_dead(phil->philo) || phil->philo->number_of_phils < 2)
+    if (get_is_any_dead(phil->philo) || phil->philo->number_of_phils < 2)
         return (0);
     pthread_mutex_lock(&(phil->philo->mutex_waiter));
     allowed_to_eat = (
@@ -21,7 +21,7 @@ int allowed_to_eat(t_phil *phil)
     return (allowed_to_eat);
 }
 
-int is_any_dead(t_philo *philo)
+int get_is_any_dead(t_philo *philo)
 {
     int flag_death;
 
@@ -29,4 +29,11 @@ int is_any_dead(t_philo *philo)
     flag_death = philo->is_any_dead;
     pthread_mutex_unlock(&(philo->mutex_death));
     return (flag_death);
+}
+
+void set_is_any_dead(t_philo *philo, int value)
+{
+    pthread_mutex_lock(&(philo->mutex_death));
+    philo->is_any_dead = value;
+    pthread_mutex_unlock(&(philo->mutex_death));
 }
