@@ -61,6 +61,7 @@ static int philo_set_params_from_argv(t_philo *philo, int argc, char **argv)
 int main(int argc, char **argv)
 {
     t_philo *philo;
+    long timestamp_simstart;
     int i;
 
     philo = philo_init();
@@ -82,7 +83,14 @@ int main(int argc, char **argv)
         return (1);
     }
     phils_set_forks(philo->phils, philo->forks, philo->number_of_phils);
-    philo->timestamp_simstart = get_current_time_ms(&philo);
+    timestamp_simstart = get_current_time_ms(&philo);
+    philo->timestamp_simstart = timestamp_simstart;
+    i = 0;
+    while (i < philo->number_of_phils)
+    {
+        philo->phils[i].last_meal_time = timestamp_simstart;
+        i++;
+    }
     i = 0;
     while (i < philo->number_of_phils)
     {

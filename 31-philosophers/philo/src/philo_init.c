@@ -22,7 +22,7 @@ t_philo *philo_init(void)
         return (NULL);
     if (philo_init_mutex(&philo, &(philo->mutex_waiter)) != 0)
         return (NULL);
-    if (philo_init_mutex(&philo, &(philo->mutex_death)) != 0)
+    if (philo_init_mutex(&philo, &(philo->mutex_is_any_dead)) != 0)
         return (NULL);
     philo->time_to_die = 0;
     philo->time_to_eat = 0;
@@ -72,7 +72,7 @@ void philo_free(t_philo **philo)
     {
         pthread_mutex_destroy(&((*philo)->mutex_log));
         pthread_mutex_destroy(&((*philo)->mutex_waiter));
-        pthread_mutex_destroy(&((*philo)->mutex_death));
+        pthread_mutex_destroy(&((*philo)->mutex_is_any_dead));
         phils_free(&((*philo)->phils), (*philo)->number_of_phils);
         (*philo)->phils = NULL;
         forks_free(&((*philo)->forks), (*philo)->number_of_phils);

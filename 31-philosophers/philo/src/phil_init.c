@@ -12,27 +12,42 @@
 
 #include "../include/philo.h"
 
+static int phil_init_mutex(t_phil **phils, pthread_mutex_t *mutex)
+{
+    if (pthread_mutex_init(mutex, NULL) != 0)
+    {
+        free(*phils);
+        *phils = NULL;
+        return (1);
+    }
+    return (0);
+}
+
 t_phil	*phils_init(int count)
 {
 	t_phil	*phils;
-	int				id;
+	int		i;
 
 	phils = malloc(sizeof(t_phil) * count);
 	if (phils == NULL)
 		return (NULL);
-	id = 0;
-	while (id < count)
+	i = 0;
+	while (i < count)
 	{
-		phils[id].id = id + 1;
-		phils[id].last_meal_time = get_current_time_ms(NULL);
-		phils[id].meals_eaten = 0;
-		phils[id].state = UNKNOWN;
-		phils[id].left_fork = NULL;
-		phils[id].right_fork = NULL;
-		phils[id].left_phil = NULL;
-		phils[id].right_phil = NULL;
-		phils[id].philo = NULL;
-		id++;
+		if (phil_init_mutex(&phils, &(phils[i].mutex_state)) != 0)
+			return (NULL);
+		if (phil_init_mutex(&phils, &(phils[i].mutex_last_meal_time)) != 0)
+			return (NULL);
+		phils[i].id = i + 1;
+		phils[i].last_meal_time = 0;
+		phils[i].meals_eaten = 0;
+		phils[i].state = UNKNOWN;
+		phils[i].left_fork = NULL;
+		phils[i].right_fork = NULL;
+		phils[i].left_phil = NULL;
+		phils[i].right_phil = NULL;
+		phils[i].philo = NULL;
+		i++;
 	}
 	return (phils);
 }
@@ -88,6 +103,8 @@ void	phils_free(t_phil **phils, int count)
 		i = 0;
 		while (i < count)
 		{
+        	pthread_mutex_destroy(&((*phils)[i].mutex_state));
+        	pthread_mutex_destroy(&((*phils)[i].mutex_last_meal_time));
 			(*phils)[i].left_fork = NULL;
 			(*phils)[i].right_fork = NULL;
 			(*phils)[i].philo = NULL;

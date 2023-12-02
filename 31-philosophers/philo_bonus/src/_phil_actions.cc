@@ -68,9 +68,9 @@ int phil_die(t_phil *phil, long timestamp)
     if (timestamp - phil->last_meal_time < phil->philo->time_to_die)
         return (!died);
     phil->state = DEAD;
-    pthread_mutex_lock(&(phil->philo->mutex_death));
+    pthread_mutex_lock(&(phil->philo->mutex_is_any_dead));
     phil->philo->is_any_dead = 1;
-    pthread_mutex_unlock(&(phil->philo->mutex_death));
+    pthread_mutex_unlock(&(phil->philo->mutex_is_any_dead));
     phil_log(timestamp, phil, "died", COLOR_RED);
     return (died);
 }

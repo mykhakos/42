@@ -53,6 +53,8 @@ typedef struct s_phil
     int meals_eaten;
     long last_meal_time;
     enum e_phil_state state;
+    pthread_mutex_t mutex_last_meal_time;
+    pthread_mutex_t mutex_state;
     struct s_fork *left_fork;
     struct s_fork *right_fork;
     struct s_phil *left_phil;
@@ -73,7 +75,7 @@ typedef struct s_philo
     t_fork *forks;
     pthread_mutex_t mutex_log;
     pthread_mutex_t mutex_waiter;
-    pthread_mutex_t mutex_death;
+    pthread_mutex_t mutex_is_any_dead;
 } t_philo;
 
 t_philo *philo_init(void);
@@ -94,6 +96,10 @@ int get_is_any_dead(t_philo *philo);
 void set_is_any_dead(t_philo *philo, int value);
 
 void phil_log(t_phil *phil, char *msg, const char *color_code);
+t_phil_state phil_get_state(t_phil *phil);
+void phil_set_state(t_phil *phil, t_phil_state state);
+long phil_get_last_meal_time(t_phil *phil);
+void phil_set_last_meal_time(t_phil *phil, long timestamp);
 void *phil_routine(void *arg_phil);
 
 int	ft_atoi(const char *str);
