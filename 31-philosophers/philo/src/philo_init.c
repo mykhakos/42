@@ -27,6 +27,7 @@ t_philo *philo_init(void)
     philo->time_to_die = 0;
     philo->time_to_eat = 0;
     philo->time_to_sleep = 0;
+    philo->simtime_start = 0;
     philo->number_of_meals = 0;
     philo->number_of_phils = 0;
     philo->is_any_dead = 0;
@@ -46,6 +47,7 @@ int philo_init_and_set_phils(t_philo *philo, int count)
         return (1);
     }
     philo->phils = phils;
+    phils_set_neighbors(phils, count);
     phils_set_philo(phils, philo, count);
     return (0);
 }

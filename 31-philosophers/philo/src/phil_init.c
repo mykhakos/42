@@ -29,6 +29,8 @@ t_phil	*phils_init(int count)
 		phils[id].state = UNKNOWN;
 		phils[id].left_fork = NULL;
 		phils[id].right_fork = NULL;
+		phils[id].left_phil = NULL;
+		phils[id].right_phil = NULL;
 		phils[id].philo = NULL;
 		id++;
 	}
@@ -44,6 +46,23 @@ void	phils_set_forks(t_phil *phils, t_fork *forks, int count)
 	{
 		phils[i].left_fork = &forks[i];
 		phils[i].right_fork = &forks[(i + 1) % count];
+		i++;
+	}
+}
+
+void	phils_set_neighbors(t_phil *phils, int count)
+{
+	int right_phil_index;
+	int left_phil_index;
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
+		left_phil_index = (i - 1 + count) % count;
+	    right_phil_index = (i + 1) % count;
+		phils[i].left_phil = &phils[left_phil_index];
+		phils[i].right_phil = &phils[right_phil_index];
 		i++;
 	}
 }

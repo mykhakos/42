@@ -1,102 +1,119 @@
 #include "../include/philo.h"
 
-int phil_eat(t_phil *phil, long timestamp)
+
+int get_sem_value(sem_t *sem)
 {
-    int eaten;
+    int value;
 
-    eaten = 0;
-    if (!is_any_dead(phil->philo))
-    {
-        phil->state = EATING;
-        phil->last_meal_time = timestamp;
-        phil_print_state(timestamp, phil, "has taken a fork", NULL);
-        if (!is_any_dead(phil->philo))
-        {
-            phil_print_state(timestamp, phil, "has taken a fork", NULL);
-            if (!is_any_dead(phil->philo))
-            {
-                phil_print_state(timestamp, phil, "is eating", COLOR_GREEN);
-                usleep(phil->philo->time_to_eat * 1000);
-                phil->meals_eaten += 1;
-                eaten = 1;
-
-            }
-        }
-    }
-    pthread_mutex_unlock(&(phil->right_fork->mutex));
-    pthread_mutex_unlock(&(phil->left_fork->mutex));
-    return (eaten);
+    sem_getvalue(sem, &value);
+    return value;
 }
 
-int phil_sleep(t_phil *phil, long timestamp)
-{
-    int slept;
 
-    slept = 0;
-    if (is_any_dead(phil->philo))
-        return (slept);
-    slept = 1;
+void phil_eat(t_phil *phil)
+{
+    phil->state = EATING;
+
+    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "waiting for the waiter permit", NULL);
+    sem_wait(phil->philo->sem_waiter);
+    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "has got the waiter permit", NULL);
+    sem_wait(phil->philo->sem_forks);
+    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "has taken a fork", NULL);
+    sem_wait(phil->philo->sem_forks);
+    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "has taken a fork", NULL);
+    phil_set_last_meal_time(phil, get_current_time_ms(&(phil->philo)));
+    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "is eating", COLOR_GREEN);
+    usleep(phil->philo->time_to_eat * 1000);
+    phil->meals_eaten += 1;
+    sem_post(phil->philo->sem_forks);
+    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "has released a fork", NULL);
+    sem_post(phil->philo->sem_forks);
+    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "has released a fork", NULL);
+    sem_post(phil->philo->sem_waiter);
+    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "has posted to the waiter semaphore", NULL);
+
+}
+
+void phil_sleep(t_phil *phil)
+{
     phil->state = SLEEPING;
-    phil_print_state(timestamp, phil, "is sleeping", COLOR_BLUE);
+    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "is sleeping", COLOR_BLUE);
     usleep(phil->philo->time_to_sleep * 1000);
-    return (slept);
 }
 
-int phil_think(t_phil *phil, long timestamp)
+void phil_think(t_phil *phil)
 {
-    int thought;
-
-    thought = 0;
-    if (is_any_dead(phil->philo))
-        return (thought);
-    thought = 1;
     if (phil->state == THINKING)
-        return (thought);
+        return ;
     phil->state = THINKING;
-    phil_print_state(timestamp, phil, "is thinking", COLOR_YELLOW);
-    return (thought);
+    phil_print_state(get_current_time_ms(&(phil->philo)), phil, "is thinking", COLOR_YELLOW);
 }
 
-int phil_die(t_phil *phil, long timestamp)
-{
-    int died;
-
-    died = 1;
-    if (is_any_dead(phil->philo))
-        return (died);
-    if (timestamp - phil->last_meal_time < phil->philo->time_to_die)
-        return (!died);
-    phil->state = DEAD;
-    pthread_mutex_lock(&(phil->philo->mutex_death));
-    phil->philo->is_any_dead = 1;
-    pthread_mutex_unlock(&(phil->philo->mutex_death));
-    phil_print_state(timestamp, phil, "died", COLOR_RED);
-    return (died);
-}
-
-void *phil_routine(void *arg_phil)
+void *death_checker(void *args)
 {
     t_phil *phil;
+    long last_meal_time;
+    long now;
+    //int i;
 
-    phil = (t_phil *)arg_phil;
-    while (phil->meals_eaten < phil->philo->number_of_meals
-            || phil->philo->number_of_meals < 0)
+    phil = (t_phil *)args;
+    while (1)
     {
-
-        if (allowed_to_eat(phil))
+        last_meal_time = phil_get_last_meal_time(phil);
+        now = get_current_time_ms(&(phil->philo));
+        if (now - last_meal_time >= phil->philo->time_to_die)
         {
-            if (!phil_eat(phil, get_current_time_ms(&(phil->philo))))
-                break ;
-            if (!phil_sleep(phil, get_current_time_ms(&(phil->philo))))
-                break ;
-        }            
-        if (!phil_think(phil, get_current_time_ms(&(phil->philo))))
+            phil_print_state(now, phil, "is dying...", COLOR_RED);
+            phil->state = DEAD;
+            sem_post(phil->philo->sem_simterm);
+            // i = 0;
+            // while (i < phil->philo->number_of_phils)
+            // {
+            //     sem_post(phil->philo->sem_simterm);
+            //     i++;
+            // }
+            phil_print_state(now, phil, "died", COLOR_RED);
             break ;
-        if (phil_die(phil, get_current_time_ms(&(phil->philo))))
-            break ;
-        if (is_any_dead(phil->philo))
-            break ;
+        }
         usleep(2000);
     }
     return (NULL);
+}
+
+// void *death_handler(void *args)
+// {
+//     t_phil *phil;
+
+//     phil = (t_phil *)args;
+//     sem_wait(phil->philo->sem_simterm);
+//     philo_free(&(phil->philo));
+//     exit(0);
+// }
+
+int phil_process_start(t_phil *phil)
+{
+    phil->pid = fork();
+    if (phil->pid == -1)
+    {
+        perror("fork");
+        philo_free(&(phil->philo));
+        exit(EXIT_FAILURE);
+    }
+    if (phil->pid == 0)
+    {
+        pthread_create(&(phil->death_checker), NULL, death_checker,
+                (void *)phil);
+        pthread_detach(phil->death_checker);
+        // pthread_create(&(phil->death_handler), NULL, death_handler,
+        //         (void *)phil);
+        // pthread_detach(phil->death_handler);
+        while (phil->meals_eaten < phil->philo->number_of_meals
+                || phil->philo->number_of_meals < 0)
+        {
+            phil_think(phil);
+            phil_eat(phil);
+            phil_sleep(phil);
+        }
+    }
+    return (phil->pid);
 }

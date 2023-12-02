@@ -23,6 +23,7 @@
 # include <sys/wait.h>
 # include <signal.h>
 # include <semaphore.h>
+# include <fcntl.h>
 
 # define ARGV_IDX_PHIL_COUNT 1
 # define ARGV_IDX_T_DIE 2
@@ -36,6 +37,11 @@
 # define COLOR_RED "\033[31m"
 # define COLOR_DEFAULT "\033[0m"
 
+# define SEM_FORKS_NAME "/philo_forks"
+# define SEM_WAITER_NAME "/philo_waiter"
+# define SEM_LOG_NAME "/philo_log"
+# define SEM_SIMTERM "/philo_simterm"
+
 typedef enum e_phil_state
 {
     UNKNOWN,
@@ -48,40 +54,38 @@ typedef enum e_phil_state
 typedef struct s_phil
 {
     pid_t pid;
+    int pstatus;
+    pthread_t death_checker;
+    pthread_t death_handler;
     int id;
     int meals_eaten;
     long last_meal_time;
+    pthread_mutex_t last_meal_time_mutex;
     enum e_phil_state state;
-    struct s_fork *left_fork;
-    struct s_fork *right_fork;
     struct s_philo *philo;
 } t_phil;
 
 typedef struct s_philo
 {
-    int is_any_dead;
     int number_of_phils;
     int number_of_meals;
     long time_to_die;
     long time_to_eat;
     long time_to_sleep;
+    long simtime_start;
     t_phil *phils;
-    t_fork *forks;
-    pthread_mutex_t mutex_log;
-    pthread_mutex_t mutex_waiter;
-    pthread_mutex_t mutex_death;
+    sem_t *sem_forks;
+    sem_t *sem_log;
+    sem_t *sem_waiter;
+    sem_t *sem_simterm;
 } t_philo;
 
 t_philo *philo_init(void);
 int philo_init_and_set_phils(t_philo *philo, int count);
-int philo_init_and_set_forks(t_philo *philo, int count);
+int philo_init_and_set_semaphores(t_philo *philo, int phil_count);
 void philo_free(t_philo **philo);
 
-t_fork	*forks_init(int count);
-void	forks_free(t_fork **forks, int count);
-
 t_phil	*phils_init(int count);
-void	phils_set_forks(t_phil *phils, t_fork *forks, int count);
 void	phils_set_philo(t_phil *phils, t_philo *philo, int count);
 void	phils_free(t_phil **phils, int count);
 t_phil *phil_left(t_phil *phil);
@@ -93,5 +97,12 @@ void *phil_routine(void *arg_phil);
 
 int	ft_atoi(const char *str);
 long get_current_time_ms(t_philo **philo);
+
+sem_t *sem_safeopen(char *sem_name, int sem_value);
+void sem_safeclose(sem_t **sem, char *sem_name);
+
+long phil_get_last_meal_time(t_phil *phil);
+void phil_set_last_meal_time(t_phil *phil, long timestamp);
+int  phil_process_start(t_phil *phil);
 
 #endif
