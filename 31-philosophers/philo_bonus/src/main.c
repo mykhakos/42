@@ -1,16 +1,17 @@
 #include "../include/philo.h"
 
-#define phil_count 5
-#define meal_count -1
-#define t_die 3000
-#define t_eat 1000
-#define t_sleep 1000
+#define phil_count 1
+#define meal_count 2
+#define t_die 410
+#define t_eat 2300
+#define t_sleep 100
 
 
 int main(void)
 {
     t_philo *philo;
     int i;
+    int pid;
 
     philo = philo_init();
     if (!philo)
@@ -26,16 +27,17 @@ int main(void)
     i = 0;
     while (i < philo->number_of_phils)
     {
-        phil_process_start(&(philo->phils[i]));
+        pid = phil_process_start(&(philo->phils[i]));
         i++;
     }
-    sem_wait(philo->sem_simterm);
-    i = 0;
-    while (i < philo->number_of_phils)
+    if (pid != 0)
     {
-        kill(philo->phils[i].pid, SIGTERM);
-        //waitpid(philo->phils[i].pid, &(philo->phils[0].pstatus), 0);
-        i++;
+        i = 0;
+        while (i < philo->number_of_phils)
+        {
+            waitpid(philo->phils[i].pid, &(philo->phils[0].pstatus), 0);
+            i++;
+        }
     }
     philo_free(&philo);
     return 0;

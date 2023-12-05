@@ -40,6 +40,7 @@
 # define SEM_FORKS_NAME "/philo_forks"
 # define SEM_WAITER_NAME "/philo_waiter"
 # define SEM_LOG_NAME "/philo_log"
+# define SEM_DEATH_CHECKER_NAME "/philo_death_checker"
 # define SEM_SIMTERM "/philo_simterm"
 
 typedef enum e_phil_state
@@ -61,6 +62,7 @@ typedef struct s_phil
     int meals_eaten;
     long last_meal_time;
     pthread_mutex_t last_meal_time_mutex;
+    pthread_mutex_t mutex_log;
     enum e_phil_state state;
     struct s_philo *philo;
 } t_phil;
@@ -77,6 +79,7 @@ typedef struct s_philo
     sem_t *sem_forks;
     sem_t *sem_log;
     sem_t *sem_waiter;
+    sem_t *sem_death_checker;
     sem_t *sem_simterm;
 } t_philo;
 
@@ -92,7 +95,7 @@ t_phil *phil_left(t_phil *phil);
 t_phil *phil_right(t_phil *phil);
 int phil_is_allowed_to_eat(t_phil *phil);
 int is_any_dead(t_philo *philo);
-void phil_log(long timestamp, t_phil *phil, const char *state, const char *color_code);
+void phil_log(t_phil *phil, char *msg, const char *color_code);
 void *phil_routine(void *arg_phil);
 
 int	ft_atoi(const char *str);

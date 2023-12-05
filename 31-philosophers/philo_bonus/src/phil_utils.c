@@ -1,16 +1,19 @@
 #include "../include/philo.h"
 
-void phil_log(
-        long timestamp,
-        t_phil *phil,
-        const char *state,
-        const char *color_code)
+void phil_log(t_phil *phil, char *msg, const char *color_code)
 {
+    long timestamp_now;
+    long time_diff;
+
+    timestamp_now = get_current_time_ms(&(phil->philo));
+    time_diff = timestamp_now - phil->philo->timestamp_simstart;
     if (!color_code)
         color_code = COLOR_DEFAULT;
     sem_wait(phil->philo->sem_log);
-    printf("%s%04ld\t%i\t%s%s\n",
-            color_code, timestamp - phil->philo->timestamp_simstart, phil->id, state, COLOR_DEFAULT);
+    pthread_mutex_lock(&(phil->mutex_log));
+    printf("%s%04ld %i %s%s\n",
+            color_code, time_diff, phil->id, msg, COLOR_DEFAULT);
+    pthread_mutex_unlock(&(phil->mutex_log));
     sem_post(phil->philo->sem_log);
 }
 

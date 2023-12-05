@@ -24,6 +24,8 @@ t_phil	*phils_init(int count)
 	while (id < count)
 	{
 		if (pthread_mutex_init(&(phils[id].last_meal_time_mutex), NULL) != 0)
+			return (NULL); // add free here later
+		if (pthread_mutex_init(&(phils[id].mutex_log), NULL) != 0)
 			return (NULL);
 		phils[id].id = id + 1;
 		phils[id].last_meal_time = get_current_time_ms(NULL);
@@ -57,6 +59,8 @@ void	phils_free(t_phil **phils, int count)
 		while (i < count)
 		{
 			(*phils)[i].philo = NULL;
+			pthread_mutex_destroy(&((*phils)[i].mutex_log));
+			pthread_mutex_destroy(&((*phils)[i].last_meal_time_mutex));
 			i++;
 		}
 		free(*phils);

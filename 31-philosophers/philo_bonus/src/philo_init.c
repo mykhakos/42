@@ -46,6 +46,9 @@ int philo_init_and_set_semaphores(t_philo *philo, int phil_count)
     philo->sem_log = sem_safeopen(SEM_LOG_NAME, 1);
     if (!philo->sem_log)
         return (1);
+    philo->sem_death_checker = sem_safeopen(SEM_DEATH_CHECKER_NAME, 1);
+    if (!philo->sem_death_checker)
+        return (1);
     philo->sem_simterm = sem_safeopen(SEM_SIMTERM, 0);
     if (!philo->sem_simterm)
         return (1);
@@ -61,6 +64,7 @@ void philo_free(t_philo **philo)
         sem_safeclose(&((*philo)->sem_forks), SEM_FORKS_NAME);
         sem_safeclose(&((*philo)->sem_waiter), SEM_WAITER_NAME);
         sem_safeclose(&((*philo)->sem_log), SEM_LOG_NAME);
+        sem_safeclose(&((*philo)->sem_death_checker), SEM_DEATH_CHECKER_NAME);
         sem_safeclose(&((*philo)->sem_simterm), SEM_SIMTERM);
         free(*philo);
         *philo = NULL;
