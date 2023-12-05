@@ -1,10 +1,10 @@
 #include "../include/philo.h"
 
-#define phil_count 1
-#define meal_count 2
-#define t_die 410
-#define t_eat 2300
-#define t_sleep 100
+#define phil_count 2
+#define meal_count 10
+#define t_die 800
+#define t_eat 200
+#define t_sleep 200
 
 
 int main(void)

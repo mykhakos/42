@@ -1,37 +1,82 @@
 #include "../include/philo.h"
 
 
-void phil_eat(t_phil *phil)
+int phil_eat(t_phil *phil)
 {
-    phil->state = EATING;
-
+    if (get_is_any_dead(phil->philo))
+        return (0);
     sem_wait(phil->philo->sem_waiter);
+    phil->state = EATING;
+    if (get_is_any_dead(phil->philo))
+    {
+        sem_post(phil->philo->sem_waiter);
+        return (0);
+    }
     sem_wait(phil->philo->sem_forks);
+    if (get_is_any_dead(phil->philo))
+    {
+        sem_post(phil->philo->sem_waiter);
+        sem_post(phil->philo->sem_forks);
+        return (0);
+    }
     phil_log(phil, "has taken a fork", COLOR_DEFAULT);
     sem_wait(phil->philo->sem_forks);
+    if (get_is_any_dead(phil->philo))
+    {
+        sem_post(phil->philo->sem_waiter);
+        sem_post(phil->philo->sem_forks);
+        sem_post(phil->philo->sem_forks);
+        return (0);
+    }
     phil_log(phil, "has taken a fork", COLOR_DEFAULT);
     phil_set_last_meal_time(phil, get_current_time_ms(&(phil->philo)));
+    if (get_is_any_dead(phil->philo))
+    {
+        sem_post(phil->philo->sem_waiter);
+        sem_post(phil->philo->sem_forks);
+        sem_post(phil->philo->sem_forks);
+        return (0);
+    }
     phil_log(phil, "is eating", COLOR_GREEN);
     phil->meals_eaten += 1;
     usleep(phil->philo->time_to_eat * 1000);
     sem_post(phil->philo->sem_forks);
     sem_post(phil->philo->sem_forks);
     sem_post(phil->philo->sem_waiter);
+    return (1);
 }
 
-void phil_sleep(t_phil *phil)
+int phil_sleep(t_phil *phil)
 {
+    if (get_is_any_dead(phil->philo))
+        return (0);
     phil->state = SLEEPING;
     phil_log(phil, "is sleeping", COLOR_BLUE);
     usleep(phil->philo->time_to_sleep * 1000);
+    return (1);
 }
 
-void phil_think(t_phil *phil)
+int phil_think(t_phil *phil)
 {
+    if (get_is_any_dead(phil->philo))
+        return (0);
     if (phil->state == THINKING)
-        return ;
+        return (1);
     phil->state = THINKING;
     phil_log(phil, "is thinking", COLOR_YELLOW);
+    return (1);
+}
+
+void notify_about_death(t_philo *philo)
+{
+    int i;
+
+    i = 0;
+    while (i < philo->number_of_phils)
+    {
+        sem_post(philo->sem_simterm);
+        i++;
+    }
 }
 
 void *death_checker(void *args)
@@ -41,23 +86,19 @@ void *death_checker(void *args)
     long now;
 
     phil = (t_phil *)args;
-    while (phil->meals_eaten < phil->philo->number_of_meals
-            || phil->philo->number_of_meals < 0)
+    while (1)
     {
-        sem_wait(phil->philo->sem_death_checker);
+        if (get_is_any_dead(phil->philo))
+            return (NULL);
         last_meal_time = phil_get_last_meal_time(phil);
         now = get_current_time_ms(&(phil->philo));
+        sem_wait(phil->philo->sem_death_checker);
         if (now - last_meal_time >= phil->philo->time_to_die)
         {
             phil->state = DEAD;
             phil_log(phil, "died", COLOR_RED);
             sem_post(phil->philo->sem_log);
-            int i = 0;
-            while (i < phil->philo->number_of_phils)
-            {
-                sem_post(phil->philo->sem_simterm);
-                i++;
-            }
+            notify_about_death(phil->philo);
             break ;
         }
         sem_post(phil->philo->sem_death_checker);
@@ -72,19 +113,15 @@ void *death_handler(void *args)
 
     phil = (t_phil *)args;
     sem_wait(phil->philo->sem_simterm);
-    philo_free(&(phil->philo));
-    exit(0);
+    set_is_any_dead(phil->philo, 1);
+    return (NULL);
 }
 
 int phil_process_start(t_phil *phil)
 {
     phil->pid = fork();
     if (phil->pid == -1)
-    {
-        perror("fork");
-        philo_free(&(phil->philo));
-        exit(EXIT_FAILURE);
-    }
+        return (-1);
     if (phil->pid == 0)
     {
         pthread_create(&(phil->death_checker), NULL, death_checker,
@@ -93,15 +130,21 @@ int phil_process_start(t_phil *phil)
         pthread_create(&(phil->death_handler), NULL, death_handler,
                 (void *)phil);
         pthread_detach(phil->death_handler);
+        usleep(1000000);
+        return (0);
         while (phil->meals_eaten < phil->philo->number_of_meals
                 || phil->philo->number_of_meals < 0)
         {
-            phil_think(phil);
-            phil_eat(phil);
-            phil_sleep(phil);
+            if (!phil_think(phil))
+                break ;
+            if (!phil_eat(phil))
+                break ;
+            if (!phil_sleep(phil))
+                break ;
+            if (get_is_any_dead(phil->philo))
+                break ;
         }
-        philo_free(&(phil->philo));
-        exit(EXIT_SUCCESS);
+        return (0);
     }
     return (phil->pid);
 }

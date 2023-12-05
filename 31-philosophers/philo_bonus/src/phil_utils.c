@@ -11,8 +11,10 @@ void phil_log(t_phil *phil, char *msg, const char *color_code)
         color_code = COLOR_DEFAULT;
     sem_wait(phil->philo->sem_log);
     pthread_mutex_lock(&(phil->mutex_log));
-    printf("%s%04ld %i %s%s\n",
-            color_code, time_diff, phil->id, msg, COLOR_DEFAULT);
+    if (!msg)
+        printf("no msg\n");
+    //printf("%s%04ld %i %s%s\n",
+    //        color_code, time_diff, phil->id, msg, COLOR_DEFAULT);
     pthread_mutex_unlock(&(phil->mutex_log));
     sem_post(phil->philo->sem_log);
 }

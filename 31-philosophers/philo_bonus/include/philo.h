@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 14:13:14 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/11/25 17:17:36 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/12/05 21:42:01 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,14 @@ typedef struct s_philo
     long time_to_eat;
     long time_to_sleep;
     long timestamp_simstart;
+    int is_any_dead;
     t_phil *phils;
     sem_t *sem_forks;
     sem_t *sem_log;
     sem_t *sem_waiter;
     sem_t *sem_death_checker;
     sem_t *sem_simterm;
+    pthread_mutex_t mutex_is_any_dead;
 } t_philo;
 
 t_philo *philo_init(void);
@@ -107,5 +109,8 @@ void sem_safeclose(sem_t **sem, char *sem_name);
 long phil_get_last_meal_time(t_phil *phil);
 void phil_set_last_meal_time(t_phil *phil, long timestamp);
 int  phil_process_start(t_phil *phil);
+
+int get_is_any_dead(t_philo *philo);
+void set_is_any_dead(t_philo *philo, int value);
 
 #endif

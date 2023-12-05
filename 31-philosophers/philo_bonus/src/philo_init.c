@@ -8,11 +8,17 @@ t_philo *philo_init(void)
     philo = malloc(sizeof(t_philo));
     if (!philo)
         return (NULL);
+    if (pthread_mutex_init(&(philo->mutex_is_any_dead), NULL) != 0)
+    {
+        free(philo);
+        return (NULL);
+    }
     philo->time_to_die = 0;
     philo->time_to_eat = 0;
     philo->time_to_sleep = 0;
     philo->number_of_meals = 0;
     philo->number_of_phils = 0;
+    philo->is_any_dead = 0;
     philo->phils = NULL;
     philo->sem_forks = NULL;
     philo->sem_waiter = NULL;
@@ -66,6 +72,7 @@ void philo_free(t_philo **philo)
         sem_safeclose(&((*philo)->sem_log), SEM_LOG_NAME);
         sem_safeclose(&((*philo)->sem_death_checker), SEM_DEATH_CHECKER_NAME);
         sem_safeclose(&((*philo)->sem_simterm), SEM_SIMTERM);
+        pthread_mutex_destroy(&((*philo)->mutex_is_any_dead));
         free(*philo);
         *philo = NULL;
     }
