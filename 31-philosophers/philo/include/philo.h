@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 14:13:14 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/11/25 17:17:36 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/12/05 20:03:53 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,10 @@ t_phil_state phil_get_state(t_phil *phil);
 void phil_set_state(t_phil *phil, t_phil_state state);
 long phil_get_last_meal_time(t_phil *phil);
 void phil_set_last_meal_time(t_phil *phil, long timestamp);
+int phil_eat(t_phil *phil);
+int phil_sleep(t_phil *phil);
+int phil_think(t_phil *phil);
+int phil_die(t_phil *phil);
 void *phil_routine(void *arg_phil);
 
 int	ft_atoi(const char *str);

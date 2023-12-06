@@ -89,7 +89,10 @@ void *death_checker(void *args)
     while (1)
     {
         if (get_is_any_dead(phil->philo))
+        {
+            //printf("%i finished death check\n", phil->id);
             return (NULL);
+        }
         last_meal_time = phil_get_last_meal_time(phil);
         now = get_current_time_ms(&(phil->philo));
         sem_wait(phil->philo->sem_death_checker);
@@ -97,13 +100,14 @@ void *death_checker(void *args)
         {
             phil->state = DEAD;
             phil_log(phil, "died", COLOR_RED);
-            sem_post(phil->philo->sem_log);
+            //sem_wait(phil->philo->sem_log);
             notify_about_death(phil->philo);
             break ;
         }
         sem_post(phil->philo->sem_death_checker);
-        usleep(2000);
+        usleep(500);
     }
+    sem_post(phil->philo->sem_death_checker);
     return (NULL);
 }
 
@@ -113,7 +117,9 @@ void *death_handler(void *args)
 
     phil = (t_phil *)args;
     sem_wait(phil->philo->sem_simterm);
-    set_is_any_dead(phil->philo, 1);
+    //printf("%i received notif\n", phil->id);
+    //set_is_any_dead(phil->philo, 1);
+    exit(0);
     return (NULL);
 }
 
@@ -130,8 +136,8 @@ int phil_process_start(t_phil *phil)
         pthread_create(&(phil->death_handler), NULL, death_handler,
                 (void *)phil);
         pthread_detach(phil->death_handler);
-        usleep(1000000);
-        return (0);
+        // usleep(1000000);
+        // return (0);
         while (phil->meals_eaten < phil->philo->number_of_meals
                 || phil->philo->number_of_meals < 0)
         {
@@ -144,7 +150,9 @@ int phil_process_start(t_phil *phil)
             if (get_is_any_dead(phil->philo))
                 break ;
         }
-        return (0);
+        //pthread_join(phil->death_handler, NULL);
+        //pthread_join(phil->death_checker, NULL);
+        //printf("%i main ret\n", phil->id);
     }
     return (phil->pid);
 }

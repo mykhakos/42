@@ -6,7 +6,7 @@
 /*   By: kmykhail <kmykhail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 14:13:14 by kmykhail          #+#    #+#             */
-/*   Updated: 2023/12/05 21:42:01 by kmykhail         ###   ########.fr       */
+/*   Updated: 2023/12/06 18:14:59 by kmykhail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_philo
     sem_t *sem_death_checker;
     sem_t *sem_simterm;
     pthread_mutex_t mutex_is_any_dead;
+    pthread_t death_checker;
 } t_philo;
 
 t_philo *philo_init(void);
