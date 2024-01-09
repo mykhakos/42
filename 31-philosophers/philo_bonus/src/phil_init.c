@@ -32,6 +32,7 @@ t_phil	*phils_init(int count)
 		phils[id].meals_eaten = 0;
 		phils[id].state = UNKNOWN;
 		phils[id].philo = NULL;
+		phils[id].sem_phil_finished = NULL;
 		id++;
 	}
 	return (phils);
@@ -45,6 +46,7 @@ void	phils_set_philo(t_phil *phils, t_philo *philo, int count)
 	while (i < count)
 	{
 		phils[i].philo = philo;
+		phils[i].sem_phil_finished = philo->sem_phil_finished[i];
 		i++;
 	}
 }

@@ -98,16 +98,16 @@ void *death_checker(void *args)
         sem_wait(phil->philo->sem_death_checker);
         if (now - last_meal_time >= phil->philo->time_to_die)
         {
-            phil->state = DEAD;
+            set_is_any_dead(phil->philo, 1);
             phil_log(phil, "died", COLOR_RED);
-            //sem_wait(phil->philo->sem_log);
             notify_about_death(phil->philo);
+            sem_post(phil->philo->sem_death_checker);
+            philo_free(&(phil->philo));
+            exit(0);
             break ;
         }
-        sem_post(phil->philo->sem_death_checker);
         usleep(500);
     }
-    sem_post(phil->philo->sem_death_checker);
     return (NULL);
 }
 
@@ -117,8 +117,13 @@ void *death_handler(void *args)
 
     phil = (t_phil *)args;
     sem_wait(phil->philo->sem_simterm);
+    usleep(1000);
     //printf("%i received notif\n", phil->id);
     //set_is_any_dead(phil->philo, 1);
+    sem_post(phil->philo->sem_waiter);
+    sem_post(phil->philo->sem_forks);
+    sem_post(phil->philo->sem_forks);
+    philo_free(&(phil->philo));
     exit(0);
     return (NULL);
 }
@@ -150,8 +155,13 @@ int phil_process_start(t_phil *phil)
             if (get_is_any_dead(phil->philo))
                 break ;
         }
-        //pthread_join(phil->death_handler, NULL);
+        //set_is_any_dead(phil->philo, 1);
+        //
         //pthread_join(phil->death_checker, NULL);
+        //for (int i = 0; i < phil->philo->number_of_phils; i++)
+        //    sem_post(phil->sem_phil_finished);
+        
+        //pthread_join(phil->death_handler, NULL);
         //printf("%i main ret\n", phil->id);
     }
     return (phil->pid);

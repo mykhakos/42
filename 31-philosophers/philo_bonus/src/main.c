@@ -1,10 +1,10 @@
 #include "../include/philo.h"
 
 #define phil_count 5
-#define meal_count 10
-#define t_die 800
+#define t_die 310
 #define t_eat 200
-#define t_sleep 200
+#define t_sleep 100
+#define meal_count 10000
 
 void *kill_children(void *args)
 {
@@ -21,6 +21,8 @@ void *kill_children(void *args)
     }
     return (NULL);
 }
+
+
 
 
 int main(void)
@@ -45,15 +47,24 @@ int main(void)
     {
         pid = phil_process_start(&(philo->phils[i]));
         if (pid == 0)
+        {
+            //wait_for_all(philo);
             break ;
+        }
         i++;
     }
-    if (pid != 0)
-    {
-        // pthread_create(&(philo->death_checker), NULL, kill_children, NULL);
-        // pthread_detach(philo->death_checker);
-    }
+    // if (pid == 0)
+    // {
+    //     int i;
 
+    //     i = 0;
+    //     while (i < 200 && philo->sem_phil_finished[i] != NULL)
+    //     {
+    //         sem_wait(philo->sem_phil_finished[i]);
+    //         i++;
+    //     }
+    //     sem_post(philo->sem_simterm);
+    // }
     if (pid != 0)
     {
         i = 0;
@@ -63,7 +74,6 @@ int main(void)
             i++;
         }
     }
-    //sem_post(philo->sem_death_checker);
     philo_free(&philo);
     return 0;
 }

@@ -42,6 +42,7 @@
 # define SEM_LOG_NAME "/philo_log"
 # define SEM_DEATH_CHECKER_NAME "/philo_death_checker"
 # define SEM_SIMTERM "/philo_simterm"
+# define SEM_PHIL_FINISHED "/philo_phil_finished"
 
 typedef enum e_phil_state
 {
@@ -65,6 +66,7 @@ typedef struct s_phil
     pthread_mutex_t mutex_log;
     enum e_phil_state state;
     struct s_philo *philo;
+    sem_t *sem_phil_finished;
 } t_phil;
 
 typedef struct s_philo
@@ -82,6 +84,7 @@ typedef struct s_philo
     sem_t *sem_waiter;
     sem_t *sem_death_checker;
     sem_t *sem_simterm;
+    sem_t *sem_phil_finished[200];
     pthread_mutex_t mutex_is_any_dead;
     pthread_t death_checker;
 } t_philo;

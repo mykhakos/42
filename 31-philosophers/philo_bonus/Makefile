@@ -5,7 +5,8 @@ OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -MMD -MP
+CFLAGS = -Wall -Wextra -Werror -MMD -MP -fsanitize=thread -g
+TSAN_FLAGS = -fsanitize=thread -g
 
 all: $(NAME)
 

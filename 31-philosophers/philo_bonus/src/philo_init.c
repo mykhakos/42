@@ -43,6 +43,8 @@ int philo_init_and_set_phils(t_philo *philo, int phil_count)
 
 int philo_init_and_set_semaphores(t_philo *philo, int phil_count)
 {
+    int i;
+
     philo->sem_forks = sem_safeopen(SEM_FORKS_NAME, phil_count);
     if (!philo->sem_forks)
         return (1);
@@ -58,11 +60,26 @@ int philo_init_and_set_semaphores(t_philo *philo, int phil_count)
     philo->sem_simterm = sem_safeopen(SEM_SIMTERM, 0);
     if (!philo->sem_simterm)
         return (1);
+    i = 0;
+    while (i < phil_count)
+    {
+        philo->sem_phil_finished[i] = sem_safeopen(SEM_PHIL_FINISHED, 0);
+        i++;
+    }
+    while (i < 200)
+    {
+        philo->sem_phil_finished[i] = NULL;
+        i++;
+    }
+    if (!philo->sem_simterm)
+        return (1);
     return (0);
 }
 
 void philo_free(t_philo **philo)
 {
+    int i;
+
     if (philo != NULL && *philo != NULL)
     {
         phils_free(&((*philo)->phils), (*philo)->number_of_phils);
@@ -72,6 +89,12 @@ void philo_free(t_philo **philo)
         sem_safeclose(&((*philo)->sem_log), SEM_LOG_NAME);
         sem_safeclose(&((*philo)->sem_death_checker), SEM_DEATH_CHECKER_NAME);
         sem_safeclose(&((*philo)->sem_simterm), SEM_SIMTERM);
+        i = 0;
+        while (i < 200 && (*philo)->sem_phil_finished[i] != NULL)
+        {
+            sem_safeclose(&((*philo)->sem_phil_finished[i]), SEM_PHIL_FINISHED);
+            i++;
+        }
         pthread_mutex_destroy(&((*philo)->mutex_is_any_dead));
         free(*philo);
         *philo = NULL;
