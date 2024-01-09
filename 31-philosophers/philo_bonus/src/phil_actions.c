@@ -90,20 +90,22 @@ void *death_checker(void *args)
     {
         if (get_is_any_dead(phil->philo))
         {
-            //printf("%i finished death check\n", phil->id);
             return (NULL);
         }
         last_meal_time = phil_get_last_meal_time(phil);
         now = get_current_time_ms(&(phil->philo));
-        sem_wait(phil->philo->sem_death_checker);
+        //sem_wait(phil->philo->sem_death_checker);
         if (now - last_meal_time >= phil->philo->time_to_die)
         {
-            set_is_any_dead(phil->philo, 1);
             phil_log(phil, "died", COLOR_RED);
+            set_is_any_dead(phil->philo, 1);
+
+ 
+
             notify_about_death(phil->philo);
             sem_post(phil->philo->sem_death_checker);
             philo_free(&(phil->philo));
-            exit(0);
+            // exit(0);
             break ;
         }
         usleep(500);
@@ -117,9 +119,10 @@ void *death_handler(void *args)
 
     phil = (t_phil *)args;
     sem_wait(phil->philo->sem_simterm);
+    set_is_any_dead(phil->philo, 1);
     usleep(1000);
     //printf("%i received notif\n", phil->id);
-    //set_is_any_dead(phil->philo, 1);
+    
     sem_post(phil->philo->sem_waiter);
     sem_post(phil->philo->sem_forks);
     sem_post(phil->philo->sem_forks);

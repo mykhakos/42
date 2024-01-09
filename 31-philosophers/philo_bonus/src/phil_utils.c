@@ -9,10 +9,11 @@ void phil_log(t_phil *phil, char *msg, const char *color_code)
     time_diff = timestamp_now - phil->philo->timestamp_simstart;
     if (!color_code)
         color_code = COLOR_DEFAULT;
-    usleep(500);
-    sem_wait(phil->philo->sem_log);
     if (get_is_any_dead(phil->philo))
        return ;
+    usleep(500);
+    sem_wait(phil->philo->sem_log);
+
     pthread_mutex_lock(&(phil->mutex_log));
     // if (!msg)
     //     printf("no msg\n");

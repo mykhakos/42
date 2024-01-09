@@ -1,9 +1,9 @@
 #include "../include/philo.h"
 
 #define phil_count 5
-#define t_die 310
+#define t_die 800
 #define t_eat 200
-#define t_sleep 100
+#define t_sleep 200
 #define meal_count 10000
 
 void *kill_children(void *args)
